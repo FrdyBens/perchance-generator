@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Perchance Meta Tags -->
+    <title>URVILLAIN Imagine – Advanced AI Art & Image Generator</title>
+    <meta name="title" content="URVILLAIN Imagine – Advanced AI Art & Image Generator" />
+    <meta name="description" content="Generate images instantly with URVILLAIN Imagine — free to use, no login or API key required, unlimited generations with the powerful Flux Schnell model." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://perchance.org/urvillain-imagine" />
+    <meta property="og:title" content="URVILLAIN Imagine – Advanced AI Art & Image Generator" />
+    <meta property="og:description" content="Free image generation with Flux Schnell model. No login, no API key, and unlimited generations." />
+    <meta property="og:image" content="https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://perchance.org/urvillain-imagine" />
+    <meta property="twitter:title" content="URVILLAIN Imagine – Advanced AI Art & Image Generator" />
+    <meta property="twitter:description" content="Free image generation with Flux Schnell model. No login, no API key, and unlimited generations." />
+    <meta property="twitter:image" content="https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg" />
+
+    <!-- Meta Keywords -->
+    <meta
+      name="keywords"
+      content="AI image generation for free, free text to image, free ai image, AI image generator, URVILLAIN, Flux Schnell, free AI image generator, free AI image, AI art free, no login AI generator, no API key AI, unlimited AI image generator, AI image online, generate image with AI, AI-powered image tool, text-to-image online, instant AI image, free text to image generator, realistic AI image, high quality AI art, open access AI image tool, creative AI image maker, Flux Schnell image generation, AI without signup, AI art generator no limit"
+    />
+
+    <!-- Favicon Plugin from Perchance -->
+    [favicon("https://user.uploads.dev/file/bb9eaa69cf52c1de1ffcb00e91ae8082.png")]
+
+    <link rel="apple-touch-icon" href="https://user.uploads.dev/file/78681e036e183f78ec57eafa54413905.png" />
+    <link rel="icon" type="image/png" href="https://user.uploads.dev/file/f37a7d70eb6cf3113695dd536f4ac40d.png" sizes="180x180" />
+    <link rel="icon" type="image/png" href="https://user.uploads.dev/file/affe2a573240f1beb78b45bde5325480.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://user.uploads.dev/file/cb7d0a2b3b882b66cffcb702502ba624.png" sizes="16x16" />
+    <link rel="manifest" href="https://files.catbox.moe/ve3kjz.webmanifest" />
+
+    <!-- Adding Font Awesome for icons - Using the one from my-try.html as it's newer -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+      /* CSS Reset and Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        background-color: #18181b; /* Main dark background */
+        color: #f4f4f5; /* Primary text color (off-white) */
+        height: 100vh;
+        overflow: hidden; /* Prevent body scrolling */
+      }
+
+      /* --- Animations --- */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* --- Scrollbar --- */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #27272a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #52525b;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #71717a;
+      }
+
+      /* Main Layout Container */
+      .app-container {
+        display: grid;
+        grid-template-columns: 320px 1fr 260px;
+        height: 100vh;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* --- Left Sidebar --- */
+      .left-sidebar {
+        background-color: #27272a; /* Sidebar background */
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 1px solid #3f3f46;
+      }
+
+      .control-section {
+        margin-bottom: 12px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .section-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .section-header .chevron {
+        color: #a1a1aa;
+        transition: transform 0.3s ease;
+      }
+
+      .section-header .chevron.rotated {
+        transform: rotate(90deg);
+      }
+
+      .section-content {
+        max-height: 1000px;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+      }
+
+      .section-content.hidden {
+        max-height: 0;
+      }
+
+      /* --- Main Content Area --- */
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: #1c1c1f;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        flex-shrink: 0;
+        border-bottom: 1px solid #3f3f46;
+        background-color: #18181b;
+      }
+
+      .top-bar .logo {
+        font-size: 20px;
+        font-weight: 700;
+        background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .top-bar .main-tabs {
+        display: flex;
+        gap: 8px;
+        background-color: #27272a;
+        padding: 6px;
+        border-radius: 10px;
+      }
+
+      .top-bar .tab-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: transparent;
+        color: #a1a1aa;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .top-bar .tab-btn.active {
+        background-color: #3f3f46;
+        color: #f4f4f5;
+      }
+
+      /* Tab Content Styling */
+      .tab-content-area {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+      }
+      .tab-pane {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        overflow: hidden; /* Important for positioning prompt bar */
+      }
+      .tab-pane.active {
+        display: flex;
+      }
+
+      #generate-tab-content.active {
+          align-items: center;
+          justify-content: center;
+      }
+
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+        max-width: 700px;
+        max-height: 700px;
+        aspect-ratio: 1 / 1;
+      }
+
+      .image-grid .img-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .image-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        background-color: #27272a;
+      }
+
+      /* New Prompt Container Styling */
+      .prompt-area-container {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 720px;
+        padding: 12px;
+        background-color: rgba(40, 40, 42, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid #3f3f46;
+      }
+
+      .prompt-area-container textarea {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: #f4f4f5;
+        resize: none;
+        font-size: 15px;
+        padding: 8px;
+        min-height: 60px;
+        line-height: 1.5;
+        outline: none;
+      }
+
+      .prompt-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 8px 0;
+        margin-top: 8px;
+        border-top: 1px solid #3f3f46;
+      }
+
+      .prompt-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .control-btn {
+          background-color: #3f3f46;
+          border: 1px solid #52525B;
+          color: #A1A1AA;
+          font-size: 14px;
+          font-weight: 500;
+          padding: 8px 12px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.2s;
+      }
+      .control-btn:hover {
+          background-color: #52525B;
+          color: #f4f4f5;
+      }
+
+      .guidance-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .guidance-container input[type="range"] {
+          width: 140px;
+          -webkit-appearance: none;
+          appearance: none;
+          background: #3f3f46;
+          height: 4px;
+          border-radius: 2px;
+          outline: none;
+          cursor: pointer;
+      }
+      .guidance-container input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 14px;
+          height: 14px;
+          background: #3b82f6;
+          border-radius: 50%;
+          border: 2px solid #f4f4f5;
+      }
+
+      #seed-input {
+        background-color: #27272A;
+        border: 1px solid #52525B;
+        color: #a1a1aa;
+        width: 100px;
+        height: 36px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .btn-regenerate {
+          background-color: #3b82f6;
+          border: none;
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: background-color 0.2s;
+      }
+
+      .btn-regenerate i {
+          transition: transform 0.5s;
+      }
+
+      .btn-regenerate:hover i {
+          transform: rotate(180deg);
+      }
+      .btn-regenerate:hover {
+          background-color: #2563eb;
+      }
+
+
+      /* --- Gallery Tab Content --- */
+      #gallery-tab-content {
+          overflow-y: auto;
+      }
+      #gallery-tab-content .gallery-container {
+         padding: 24px;
+      }
+
+      .gallery-grid {
+        width: 100%;
+      }
+
+
+      /* --- Right Sidebar (History) --- */
+      .right-sidebar {
+        background-color: #27272a;
+        padding: 16px;
+        overflow-y: auto;
+        border-left: 1px solid #3f3f46;
+      }
+
+      .history-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+      }
+      .history-header .icon-btn {
+        background: none;
+        border: none;
+        color: #a1a1aa;
+        cursor: pointer;
+      }
+
+      .history-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .history-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      .history-item img {
+        width: 100%;
+        border-radius: 12px;
+      }
+
+      .history-item span {
+        font-size: 13px;
+        color: #a1a1aa;
+        padding-left: 4px;
+      }
+
+      /* Styles for thumbnail items in sidebars */
+      .thumbnail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding-top: 12px;
+      }
+
+      .thumbnail-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .thumbnail-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .thumbnail-item .image-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+        overflow: hidden;
+        background-color: #3f3f46;
+      }
+
+      .thumbnail-item.selected .image-container {
+        border-color: #60a5fa;
+      }
+
+      .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumbnail-item span {
+        font-size: 12px;
+        color: #a1a1aa;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <!-- Styles Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Styles</h3>
+            <i class="fas fa-chevron-right chevron rotated"></i>
+          </div>
+          <div class="section-content">
+            <div class="thumbnail-grid">
+              <div class="thumbnail-item selected" data-prompt="">
+                <div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=No+Style" alt="No Style" /></div>
+                <span>No Style</span>
+              </div>
+              <div class="thumbnail-item" data-prompt="**Base Style**: Ultra-realistic photo capture as if shot with a full-frame DSLR and a 50 mm f/1.8 lens—precise exposure (f/1.8, 1/125 s, ISO 100), accurate white balance (daylight 5500 K), natural ambient and rim lighting, true-to-life skin and material textures (no painterly strokes), realistic depth of field with smooth bokeh, slight film grain or sensor noise, authentic lens artifacts (soft vignetting, minor chromatic aberration), minimal post-processing (gentle color grading in neutral profile), perfectly framed composition.\n• Mention specific camera & lens specs for consistency\n• Use technical terms (shutter speed, aperture, ISO, color temp)\n• Avoid painterly or hyper-detail language—think “camera” not “brush”\n• Keep it grounded in real-world photography techniques.">
+                <div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Realistic" alt="Realistic" /></div>
+                <span>Realistic</span>
+              </div>
+              <div class="thumbnail-item" data-prompt="**Base Style**: Candid photorealistic vintage. Emphasize natural lighting, imperfect framing, and subtle grain textures reminiscent of Kodak film. Prioritize warm tones, soft focus, and muted color palettes to evoke nostalgia. The subject should appear unposed and authentic, as if caught in a fleeting moment. Inspired by 35mm street photography, family photo albums, and analog documentary aesthetics from the 70s to 90s. (negativePrompt:::low quality, blurry, low-res)">
+                <div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Kodak+Candid" alt="Kodak Candid" /></div>
+                <span>Kodak</span>
+              </div>
+              <div class="thumbnail-item" data-prompt="**Base Style**: cinematic movie still, film still, photorealistic, hyperrealistic, 8K, UHD, masterpiece, professional photography, high dynamic range (HDR), high detail, sharp focus, crystal clear details, shot on cinema camera, anamorphic, shallow depth of field, bokeh, cinematic lighting, volumetric light, god rays, dramatic lighting, dramatic contrast, strong shadows, rim light, filmic, film grain, intricate details, atmospheric, moody, rich tones. (negativePrompt:::painting, drawing, illustration, sketch, cartoon, anime, manga, 3D, render, CGI, VFX, video game, art, digital art, poster, dark image, dim lighting, blurry, low quality, jpeg artifacts, ugly, deformed, disfigured, bad anatomy, extra limbs, missing limbs, fused fingers, too many fingers, watermark, text, signature, logo, camera)">
+                <div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Cinematic" alt="Cinematic" /></div>
+                <span>Cinematic</span>
+              </div>
+              <div class="thumbnail-item" data-prompt="highly detailed, soft painterly brushwork, realistic human features, natural anatomy, lifelike proportions, expressive eyes, smooth skin texture, subtle imperfections, oil painting style, classical portrait lighting, ambient glow, rich color depth, soft natural shadows, volumetric lighting, light bounce, fine texture details, realistic surface detail, soft rim lighting, gentle depth of field, artistic realism, illustrated realism, by atey ghailan, by charlie bowater, by puinkey, by taranfiddler, by curbet, by honovy, by anhes (negativePrompt:::low quality, worst quality, low resolution, poorly drawn, deformed)">
+                <div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Oil+Painting" alt="Oil Painting" /></div>
+                <span>Oil Painting</span>
+              </div>
+              <div class="thumbnail-item" data-prompt="**Base Style**: anime-style character, sharp cel shading, clean line art, vibrant colors, detailed eyes, soft gradients in background, high-contrast lighting, studio anime finish, realistic surface detail, proportionally anatomy, crisp digital rendering, style inspired by modern OVA anime or serialized anime productions — avoids any too wide eyes. (negativePrompt:::low quality, worst quality, low resolution, poorly drawn, deformed, overly realistic and 3D)">
+                <div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Anime" alt="Anime" /></div>
+                <span>Anime</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Obsecuritas Regnum & Themes from index-old.html -->
+        [something("urvillain-imagine", "https://user.uploads.dev/file/8e34cce3e219d3ea4995977cc097482f.jpg")]
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Themes</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content">
+            <div class="theme-selector" style="padding-top: 12px;"> <!-- Basic styling for now -->
+              <span class="theme-label" style="color: #a1a1aa; margin-bottom: 6px; display: block;"><i class="fas fa-palette"></i> URV Themes</span>
+              <select id="selectThemes" class="theme-dropdown" onchange="updateSelectedThemes(this.value)" style="width: 100%; padding: 8px; border-radius: 4px; background-color: #3f3f46; color: #f4f4f5; border: 1px solid #52525b;">
+                [urvThemes]
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Species Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Species</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div class="thumbnail-grid">
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Human" alt="Human"></div><span>Human</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Elf" alt="Elf"></div><span>Elf</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Dwarf" alt="Dwarf"></div><span>Dwarf</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Orc" alt="Orc"></div><span>Orc</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Cyborg" alt="Cyborg"></div><span>Cyborg</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Angel" alt="Angel"></div><span>Angel</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Section -->
+         <div class="control-section">
+          <div class="section-header">
+            <h3>Location</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div class="thumbnail-grid">
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Forest" alt="Forest"></div><span>Forest</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Cyberpunk+City" alt="Cyberpunk City"></div><span>City</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Ruins" alt="Ruins"></div><span>Ruins</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Spaceship" alt="Spaceship"></div><span>Spaceship</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Beach" alt="Beach"></div><span>Beach</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Tavern" alt="Tavern"></div><span>Tavern</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Custom Item Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Add Custom Item</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div style="padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <input type="text" id="customItemInput" placeholder="Enter item name..." style="background-color: #3f3f46; color: #f4f4f5; border: 1px solid #52525b; padding: 8px; border-radius: 4px;">
+              <button id="addCustomItemBtn" style="background-color: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">Add Item</button>
+            </div>
+            <div id="customItemsContainer" class="thumbnail-grid" style="margin-top: 12px;">
+              <!-- Custom items will be appended here -->
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="top-bar">
+          <div class="logo">ImagineAI</div>
+          <div class="main-tabs">
+            <button class="tab-btn active" data-tab="generate">Generate</button>
+            <button class="tab-btn" data-tab="gallery">Gallery</button>
+            <button class="tab-btn" data-tab="forum">Forum</button> <!-- Added Forum Tab -->
+          </div>
+          <div></div> <!-- Spacer -->
+        </div>
+
+        <div class="tab-content-area">
+          <div id="generate-tab-content" class="tab-pane active">
+            <div class="generation-area" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px;">
+              [output]
+            </div>
+
+            <div class="prompt-area-container">
+                <textarea id="prompt-textarea" placeholder="Describe what you want to create...">A stunning young blonde teenager, emarating an aura of youthful innocence and inexperience. She stands in the vibrant countryside, surrounded by the verdant embrace of lush fields and towering trees, their foliage whispering secrets of the world beyond. Her eves sparkle with the iov of discovery. as she aazes directiv into the camera with a</textarea>
+                <div class="prompt-controls">
+                    <div class="prompt-group">
+                        <button class="control-btn"><i class="far fa-square"></i> 1:1 <i class="fas fa-chevron-down fa-xs"></i></button>
+                        <div class="guidance-container">
+                            <input type="range" id="guidanceScale" min="1" max="15" step="1" value="7" />
+                        </div>
+                        <input type="text" id="seed-input" placeholder="Seed"/>
+                        <!-- New UI Elements Added Here -->
+                        <select id="imageCountSelect" class="control-btn" style="padding: 8px 12px; height: auto; -webkit-appearance: menulist; appearance: menulist;">
+                            <option value="1">1 Image</option>
+                            <option value="2">2 Images</option>
+                            <option value="4" selected>4 Images</option>
+                            <option value="8">8 Images</option>
+                            <option value="16">16 Images</option>
+                        </select>
+                        <input type="text" id="saveTitleInput" placeholder="Title for gallery..." class="control-btn" style="background-color: #27272A; border: 1px solid #52525B; color: #a1a1aa; width: 120px; height: 36px; text-align: center;">
+                        <button class="control-btn"><i class="fas fa-comment-dots"></i></button>
+                    </div>
+                    <button id="regenerate-btn" class="btn-regenerate"><i class="fas fa-magic"></i> Generate</button>
+                </div>
+            </div>
+          </div>
+
+          <div id="gallery-tab-content" class="tab-pane">
+            <div class="gallery-container">
+              <hr style="border-color: #3f3f46; margin-bottom: 1rem; border-style: solid; border-width: 1px 0 0 0;" />
+              <div style="margin: 0; padding: 0;">
+                <ul style="font-size: 0.8rem; color: #a1a1aa; font-family: inherit; margin: 0; padding-left: 1rem; line-height: 1.5; list-style: none;">
+                  <li style="margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #facc15; margin-right: 8px;"></i>
+                    NSFW images are allowed, but any content involving minors, hate speech, or discrimination will result in an
+                    <strong style="color: #ef4444;">immediate ban</strong>.
+                  </li>
+                  <li style="margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-ban" style="color: #ef4444; margin-right: 8px;"></i>
+                    Spamming the public gallery with <strong style="color: #ffffff;">more than 10 images</strong> of the same theme is prohibited.
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-users" style="color: #3b82f6; margin-right: 8px;"></i>
+                    Respect the public gallery.
+                  </li>
+                </ul>
+              </div>
+              <hr style="border-color: #3f3f46; margin-top: 1rem; margin-bottom: 1rem; border-style: solid; border-width: 1px 0 0 0;" />
+              <div class="gallery-grid">
+                  [fluxSchnell(galleryOptions)]
+              </div>
+            </div>
+          </div>
+
+          <!-- Forum Tab Content -->
+          <div id="forum-tab-content" class="tab-pane">
+            <div class="gallery-container"> <!-- Reusing gallery-container for padding -->
+              [commentsPlugin(commentOptions)]
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="right-sidebar">
+        <div class="history-header">
+          <button class="icon-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="history-feed">
+          <!-- History items will be dynamically populated by JavaScript -->
+          <!-- Fallback placeholders if JS history is empty: -->
+          <div class="history-item">
+            <img src="https://via.placeholder.com/230x230.png?text=History+1" alt="History thumbnail" />
+            <span>Placeholder prompt 1...</span>
+          </div>
+          <div class="history-item">
+            <img src="https://via.placeholder.com/230x230.png?text=History+2" alt="History thumbnail" />
+            <span>Placeholder prompt 2...</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Aspect Ratio Cycling ---
+        const aspectRatioBtn = document.querySelector('.prompt-group .control-btn');
+        const aspectRatios = ["1:1", "2:3", "3:2"]; // Add more as needed
+        const aspectRatioIcons = ["fa-regular fa-square", "fa-solid fa-image-portrait", "fa-solid fa-panorama"]; // Matching Font Awesome icons
+        let currentAspectRatioIndex = 0;
+        let currentResolution = "1024x1024"; // Default, will be updated by updateOrientation
+
+        if (aspectRatioBtn) {
+            // Set initial state by calling updateOrientation
+            updateOrientation(currentAspectRatioIndex); // Initialize button text/data and global var
+
+            aspectRatioBtn.addEventListener('click', () => {
+                currentAspectRatioIndex = (currentAspectRatioIndex + 1) % aspectRatios.length;
+                updateOrientation(currentAspectRatioIndex);
+            });
+        }
+
+        // This function was from index-old.html context, let's define it here or ensure it's available
+        // It seems like the aspect ratio button itself is handling the text, but we need to set `window.resolution`
+        function updateOrientation(value) { // value is the index for aspectRatios array
+            const orientationValueEl = aspectRatioBtn; // The button itself will display the text
+            const resolutions = ["1024x1024", "768x1024", "1024x768"]; // Example resolutions matching 1:1, 2:3, 3:2 for Perchance
+
+            if(orientationValueEl) {
+              orientationValueEl.innerHTML = `<i class="${aspectRatioIcons[value]}"></i> ${aspectRatios[value]} <i class="fas fa-chevron-down fa-xs"></i>`;
+              orientationValueEl.dataset.aspectRatio = aspectRatios[value]; // Keep this for other JS if needed
+            }
+            window.resolution = resolutions[value]; // Set global var for Perchance
+            console.log("Resolution set to:", window.resolution);
+        }
+
+
+        function getSelectedAspectRatio() { // This might be redundant if window.resolution is kept up-to-date
+            return aspectRatioBtn ? aspectRatioBtn.dataset.aspectRatio : aspectRatios[0];
+        }
+
+        // --- Main Prompt Assembly and Generation Function ---
+        function generateImages() {
+            let collectedPromptParts = [];
+            let negativePromptParts = []; // For future use if styles have negative parts
+
+            // 1. Get Main Prompt Text
+            const mainPromptText = document.getElementById('prompt-textarea').value.trim();
+            if (mainPromptText) {
+                collectedPromptParts.push(mainPromptText);
+            }
+
+            // 2. Get Selected Style
+            const stylesSection = document.querySelector('.left-sidebar .control-section:nth-child(1)'); // Assuming first section is Styles
+            const selectedStyleItem = stylesSection ? stylesSection.querySelector('.thumbnail-item.selected') : null;
+            if (selectedStyleItem && selectedStyleItem.dataset.prompt) {
+                const fullPromptData = selectedStyleItem.dataset.prompt;
+                let mainStylePrompt = fullPromptData;
+                let negativeStylePrompt = "";
+
+                if (fullPromptData.includes("(negativePrompt:::")) {
+                    const parts = fullPromptData.split("(negativePrompt:::");
+                    mainStylePrompt = parts[0].trim();
+                    negativeStylePrompt = parts[1].replace(")", "").trim();
+                }
+
+                if (mainStylePrompt) {
+                    collectedPromptParts.push(mainStylePrompt);
+                }
+                if (negativeStylePrompt) {
+                    negativePromptParts.push(negativeStylePrompt);
+                }
+            }
+
+            // 3. Get Selected "Boxes" (Species, Location) - using alt text as a simple key
+            const sidebarSections = document.querySelectorAll('.left-sidebar .control-section');
+            sidebarSections.forEach(section => {
+                const headerText = section.querySelector('h3')?.textContent;
+                const selectedItem = section.querySelector('.thumbnail-item.selected');
+                if (selectedItem && (headerText === "Species" || headerText === "Location")) {
+                    const itemName = selectedItem.querySelector('span').textContent;
+                    // Again, map to actual prompt phrases.
+                    // Example: if (headerText === "Species" && itemName === "Elf") collectedPromptParts.push("fantasy elf character");
+                    if (itemName) {
+                         collectedPromptParts.push(itemName.toLowerCase());
+                    }
+                }
+            });
+
+            // 4. Get Custom Added Items
+            const customItems = document.querySelectorAll('#customItemsContainer .thumbnail-item.selected');
+            customItems.forEach(item => {
+                const itemName = item.querySelector('span').textContent;
+                if (itemName) {
+                    collectedPromptParts.push(itemName.toLowerCase());
+                }
+            });
+
+            // 5. Get URV Theme (if selectThemes element exists and has a value)
+            const themeSelect = document.getElementById('selectThemes');
+            if (themeSelect && themeSelect.value) {
+                // Assuming 'theme' object is populated by Perchance for [urvThemes]
+                // and has a structure like: theme = { "themeName1": {prompt: "prompt for theme1"}, ... }
+                // This part is a placeholder as `theme` object is not defined in current scope.
+                // It would typically be populated by the Perchance [urvThemes] plugin.
+                // For now, let's just take the value if it's not empty.
+                if (typeof theme !== 'undefined' && theme[themeSelect.value] && theme[themeSelect.value].prompt) {
+                     collectedPromptParts.push(theme[themeSelect.value].prompt);
+                } else if (themeSelect.value) {
+                    // Fallback if theme object isn't structured as expected, but has a value
+                    // collectedPromptParts.push(themeSelect.value);
+                }
+            }
+
+
+            // 6. Get Generation Settings
+            const aspectRatio = getSelectedAspectRatio();
+            const guidance = document.getElementById('guidanceScale').value;
+            let seed = document.getElementById('seed-input').value.trim();
+            if (seed === '') {
+                seed = Math.floor(Math.random() * 1000000).toString();
+            }
+
+            // --- Assemble Final Prompt ---
+            // Basic assembly, can be made more sophisticated
+            let finalPrompt = collectedPromptParts.join(", ");
+            let finalNegativePrompt = negativePromptParts.join(", ");
+
+            // Add settings to prompt (Perchance plugins might expect these differently)
+            // This is a generic way to include them.
+            // Example for a plugin that might take an object:
+            // window.fluxSchnellInput = {
+            //     prompt: finalPrompt,
+            //     negative_prompt: finalNegativePrompt,
+            //     aspect_ratio: aspectRatio,
+            //     guidance_scale: guidance,
+            //     seed: seed
+            // };
+            // Or for a plugin that takes a single string with flags:
+            let fullPromptForPlugin = finalPrompt;
+            if(finalNegativePrompt) fullPromptForPlugin += ` (negativePrompt::: ${finalNegativePrompt})`;
+            fullPromptForPlugin += ` --ar ${aspectRatio}`;
+            fullPromptForPlugin += ` --guidance ${guidance}`;
+            fullPromptForPlugin += ` --seed ${seed}`;
+            // window.promptStringForPlugin = fullPromptForPlugin; // This is one way Perchance plugins might take input
+
+            // --- Setting Global Variables for Perchance ---
+            window.userPrompt = finalPrompt; // Assembled positive prompt
+            window.negativePrompt = finalNegativePrompt; // Assembled negative prompt
+
+            // window.resolution is set by updateOrientation
+
+            const guidanceSlider = document.getElementById('guidanceScale');
+            if (guidanceSlider) window.guidanceScale = parseInt(guidanceSlider.value, 10);
+
+            const seedInput = document.getElementById('seed-input');
+            if (seedInput) window.seed = seedInput.value.trim() === '' ? Math.floor(Math.random() * 1000000000).toString() : seedInput.value.trim();
+
+            const imageCountSelect = document.getElementById('imageCountSelect');
+            if (imageCountSelect) window.outputCount = parseInt(imageCountSelect.value, 10);
+
+            const saveTitleInput = document.getElementById('saveTitleInput');
+            if (saveTitleInput) window.saveTitle = saveTitleInput.value;
+
+            console.log("--- Global Perchance Variables Set ---");
+            console.log("window.userPrompt:", window.userPrompt);
+            console.log("window.negativePrompt:", window.negativePrompt);
+            console.log("window.resolution:", window.resolution);
+            console.log("window.guidanceScale:", window.guidanceScale);
+            console.log("window.seed:", window.seed);
+            console.log("window.outputCount:", window.outputCount);
+            console.log("window.saveTitle:", window.saveTitle);
+            console.log("--- --- ---");
+            // console.log("Final Combined Prompt String (example for plugin):", fullPromptForPlugin); // Kept for debugging
+
+            // --- Simulate image update (actual update by Perchance plugin) ---
+            // const imageWrappers = document.querySelectorAll('.image-grid .img-wrapper img'); // Removed
+            // imageWrappers.forEach((img, index) => { // Removed
+            //     // Using via.placeholder.com for consistency with initial placeholders // Removed
+            //     img.src = `https://via.placeholder.com/350x350.png?text=Generated+${index + 1}+S${seed}`; // Removed
+            // }); // Removed
+            // console.log("Simulated image grid update with placeholder.com. Perchance plugin would handle actual generation."); // Removed
+            console.log("Image display will be handled by Perchance [output] tag.");
+
+            // --- Save to History ---
+            const userFriendlyPromptForHistory = mainPromptText || collectedPromptParts[0] || "Generated Image";
+            // Use a generic placeholder for history images, as actual generation is not happening client-side.
+            const historyPlaceholderUrl = 'https://via.placeholder.com/230x230.png?text=Details+Saved+to+History';
+            if (userFriendlyPromptForHistory) { // Only save if there's a prompt
+                saveImageToHistory(historyPlaceholderUrl, userFriendlyPromptForHistory);
+            }
+        }
+
+        document.getElementById('regenerate-btn').addEventListener('click', generateImages);
+
+        // --- Collapsible Sections Logic ---
+        const sectionHeaders = document.querySelectorAll(".section-header");
+        sectionHeaders.forEach((header) => {
+          header.addEventListener("click", () => {
+            const content = header.nextElementSibling;
+            const chevron = header.querySelector(".chevron");
+            content.classList.toggle("hidden");
+            chevron.classList.toggle("rotated");
+          });
+        });
+
+        // --- Thumbnail Selection Logic ---
+        const thumbnailItems = document.querySelectorAll(".thumbnail-item");
+        thumbnailItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            const grid = item.closest('.thumbnail-grid');
+            const siblings = grid.querySelectorAll(".thumbnail-item");
+            siblings.forEach((sibling) => sibling.classList.remove("selected"));
+            item.classList.add("selected");
+          });
+        });
+
+        // --- Main Tabs (Generate/Gallery) Logic ---
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const targetTab = button.getAttribute("data-tab");
+                tabButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                tabPanes.forEach(pane => {
+                    pane.classList.toggle("active", pane.id === `${targetTab}-tab-content`);
+                });
+            });
+        });
+
+        // --- Image History Functionality ---
+        const MAX_HISTORY_ITEMS = 10;
+        const HISTORY_STORAGE_KEY = 'imageHistory';
+
+        function saveImageToHistory(imageUrl, promptText) {
+            let history = loadHistory();
+
+            // Add new item to the beginning
+            history.unshift({ imageUrl, promptText, timestamp: new Date().toISOString() });
+
+            // Limit history size
+            if (history.length > MAX_HISTORY_ITEMS) {
+                history = history.slice(0, MAX_HISTORY_ITEMS);
+            }
+
+            localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+            displayHistory();
+        }
+
+        function loadHistory() {
+            const historyJson = localStorage.getItem(HISTORY_STORAGE_KEY);
+            return historyJson ? JSON.parse(historyJson) : [];
+        }
+
+        function displayHistory() {
+            const historyFeed = document.querySelector('.history-feed');
+            if (!historyFeed) return;
+
+            const history = loadHistory();
+            historyFeed.innerHTML = ''; // Clear current history
+
+            if (history.length === 0) {
+                // Optional: Display a message if history is empty
+                // const emptyMsg = document.createElement('p');
+                // emptyMsg.textContent = 'No history yet.';
+                // emptyMsg.style.color = '#a1a1aa';
+                // historyFeed.appendChild(emptyMsg);
+                // For now, retain existing placeholder if no JS history
+                historyFeed.innerHTML = `
+                  <div class="history-item">
+                    <img src="https://via.placeholder.com/230x230.png?text=History+1" alt="History thumbnail" />
+                    <span>Initial placeholder 1</span>
+                  </div>
+                  <div class="history-item">
+                    <img src="https://via.placeholder.com/230x230.png?text=History+2" alt="History thumbnail" />
+                    <span>Initial placeholder 2</span>
+                  </div>`;
+                return;
+            }
+
+            history.forEach(item => {
+                const historyItemDiv = document.createElement('div');
+                historyItemDiv.classList.add('history-item');
+
+                const img = document.createElement('img');
+                img.src = item.imageUrl;
+                img.alt = 'History thumbnail';
+
+                const span = document.createElement('span');
+                // Display full prompt, or a snippet if too long
+                span.textContent = item.promptText.length > 50 ? item.promptText.substring(0, 47) + '...' : item.promptText;
+
+                historyItemDiv.appendChild(img);
+                historyItemDiv.appendChild(span);
+                historyFeed.appendChild(historyItemDiv);
+            });
+        }
+
+        // Event Listener for saving to history when "Regenerate" is clicked
+        const regenerateBtn = document.getElementById('regenerate-btn');
+        if (regenerateBtn) {
+            regenerateBtn.addEventListener('click', () => {
+                const firstImageInGrid = document.querySelector('.image-grid img');
+                const promptTextarea = document.getElementById('prompt-textarea');
+
+                if (firstImageInGrid && promptTextarea) {
+                    // Use a placeholder image URL for now as the actual generation is simulated
+                    // In a real scenario, this would be the URL of the *newly* generated image
+                    const imageUrl = firstImageInGrid.src; // This will get the current image, not the one about to be generated
+                                                        // For actual implementation, save *after* new image is loaded.
+                                                        // For this task, saving current one is fine.
+                    const prompt = promptTextarea.value;
+                    if (imageUrl && !imageUrl.startsWith('[[') && prompt) { // Avoid saving placeholder links
+                        saveImageToHistory(imageUrl, prompt);
+                    }
+                }
+            });
+        }
+
+        // Initial display of history on page load
+        displayHistory();
+
+        // --- Custom Item Functionality ---
+        const customItemInput = document.getElementById('customItemInput');
+        const addCustomItemBtn = document.getElementById('addCustomItemBtn');
+        const customItemsContainer = document.getElementById('customItemsContainer');
+
+        function addCustomItem() {
+            const itemName = customItemInput.value.trim();
+            if (itemName === '') {
+                alert('Please enter an item name.');
+                return;
+            }
+
+            const newItemDiv = document.createElement('div');
+            newItemDiv.classList.add('thumbnail-item');
+            // newItemDiv.classList.add('custom-item'); // Optional: for specific custom item styling
+
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('image-container');
+            // Placeholder for image - can be a generic icon or text
+            imageContainer.innerHTML = '<i class="fas fa-plus" style="font-size: 24px; color: #52525b; display:flex; justify-content:center; align-items:center; width:100%; height:100%;"></i>';
+
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = itemName;
+
+            newItemDiv.appendChild(imageContainer);
+            newItemDiv.appendChild(nameSpan);
+
+            customItemsContainer.appendChild(newItemDiv);
+
+            // Add selection logic similar to other thumbnail items
+            newItemDiv.addEventListener("click", () => {
+                const grid = newItemDiv.closest('.thumbnail-grid');
+                const siblings = grid.querySelectorAll(".thumbnail-item");
+                siblings.forEach((sibling) => sibling.classList.remove("selected"));
+                newItemDiv.classList.add("selected");
+                // Here you might want to trigger some action with the custom item's name (itemName)
+                console.log("Custom item selected:", itemName);
+            });
+
+            customItemInput.value = ''; // Clear input field
+        }
+
+        if (addCustomItemBtn) {
+            addCustomItemBtn.addEventListener('click', addCustomItem);
+        }
+
+        // Optional: Allow adding by pressing Enter in the input field
+        if (customItemInput) {
+            customItemInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    addCustomItem();
+                }
+            });
+        }
+
+      });
+    </script>
+
+    <!-- Generator Stats from index-old.html -->
+    <stats style="text-align: center; font-size: 0.9em; color: #a1a1aa; padding: 20px;">
+      Thank you to the <strong style="color: #7dd3fc;">[generatorStats(null, "views")] people</strong> who viewed my generator.<br />
+      It was last edited by me <strong style="color: #7dd3fc;">[generatorStats(null, "lastEditTime")]</strong>.
+    </stats>
+  </body>
+</html>
+
+[end of index-v0001.html]
