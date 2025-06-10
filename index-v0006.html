@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Perchance Meta Tags -->
+    <title>URVILLAIN Imagine – Advanced AI Art & Image Generator</title>
+    <meta name="title" content="URVILLAIN Imagine – Advanced AI Art & Image Generator" />
+    <meta name="description" content="Generate images instantly with URVILLAIN Imagine — free to use, no login or API key required, unlimited generations with the powerful Flux Schnell model." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://perchance.org/urvillain-imagine" />
+    <meta property="og:title" content="URVILLAIN Imagine – Advanced AI Art & Image Generator" />
+    <meta property="og:description" content="Free image generation with Flux Schnell model. No login, no API key, and unlimited generations." />
+    <meta property="og:image" content="https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://perchance.org/urvillain-imagine" />
+    <meta property="twitter:title" content="URVILLAIN Imagine – Advanced AI Art & Image Generator" />
+    <meta property="twitter:description" content="Free image generation with Flux Schnell model. No login, no API key, and unlimited generations." />
+    <meta property="twitter:image" content="https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg" />
+
+    <!-- Meta Keywords -->
+    <meta
+      name="keywords"
+      content="AI image generation for free, free text to image, free ai image, AI image generator, URVILLAIN, Flux Schnell, free AI image generator, free AI image, AI art free, no login AI generator, no API key AI, unlimited AI image generator, AI image online, generate image with AI, AI-powered image tool, text-to-image online, instant AI image, free text to image generator, realistic AI image, high quality AI art, open access AI image tool, creative AI image maker, Flux Schnell image generation, AI without signup, AI art generator no limit"
+    />
+
+    <!-- Favicon Plugin from Perchance -->
+    [favicon("https://user.uploads.dev/file/bb9eaa69cf52c1de1ffcb00e91ae8082.png")]
+
+    <link rel="apple-touch-icon" href="https://user.uploads.dev/file/78681e036e183f78ec57eafa54413905.png" />
+    <link rel="icon" type="image/png" href="https://user.uploads.dev/file/f37a7d70eb6cf3113695dd536f4ac40d.png" sizes="180x180" />
+    <link rel="icon" type="image/png" href="https://user.uploads.dev/file/affe2a573240f1beb78b45bde5325480.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://user.uploads.dev/file/cb7d0a2b3b882b66cffcb702502ba624.png" sizes="16x16" />
+    <link rel="manifest" href="https://files.catbox.moe/ve3kjz.webmanifest" />
+
+    <!-- Adding Font Awesome for icons - Using the one from my-try.html as it's newer -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+      /* CSS Reset and Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        background-color: #18181b; /* Main dark background */
+        color: #f4f4f5; /* Primary text color (off-white) */
+        height: 100vh;
+        overflow: hidden; /* Prevent body scrolling */
+      }
+
+      /* --- Animations --- */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* --- Scrollbar --- */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #27272a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #52525b;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #71717a;
+      }
+
+      /* Main Layout Container */
+      .app-container {
+        display: grid;
+        grid-template-columns: 320px 1fr; /* Removed third column for right sidebar */
+        height: 100vh;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* --- Left Sidebar --- */
+      .left-sidebar {
+        background-color: #27272a; /* Sidebar background */
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 1px solid #3f3f46;
+      }
+
+      .control-section {
+        margin-bottom: 12px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .section-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .section-header .chevron {
+        color: #a1a1aa;
+        transition: transform 0.3s ease;
+      }
+
+      .section-header .chevron.rotated {
+        transform: rotate(90deg);
+      }
+
+      .section-content {
+        max-height: 1000px;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+      }
+
+      .section-content.hidden {
+        max-height: 0;
+      }
+
+      /* --- Main Content Area --- */
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: #1c1c1f;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        flex-shrink: 0;
+        border-bottom: 1px solid #3f3f46;
+        background-color: #18181b;
+      }
+
+      .top-bar .logo {
+        font-size: 20px;
+        font-weight: 700;
+        background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .top-bar .main-tabs {
+        display: flex;
+        gap: 8px;
+        background-color: #27272a;
+        padding: 6px;
+        border-radius: 10px;
+      }
+
+      .top-bar .tab-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: transparent;
+        color: #a1a1aa;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .top-bar .tab-btn.active {
+        background-color: #3f3f46;
+        color: #f4f4f5;
+      }
+
+      /* Tab Content Styling */
+      .tab-content-area {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+      }
+      .tab-pane {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        overflow: hidden; /* Important for positioning prompt bar */
+      }
+      .tab-pane.active {
+        display: flex;
+      }
+
+      #generate-tab-content.active {
+          align-items: center;
+          justify-content: center;
+      }
+
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+        max-width: 700px;
+        max-height: 700px;
+        aspect-ratio: 1 / 1;
+      }
+
+      .image-grid .img-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .image-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        background-color: #27272a;
+      }
+
+      /* New Prompt Container Styling */
+      .prompt-area-container {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 720px;
+        padding: 12px;
+        background-color: rgba(40, 40, 42, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid #3f3f46;
+      }
+
+      .prompt-area-container textarea {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: #f4f4f5;
+        resize: none;
+        font-size: 15px;
+        padding: 8px;
+        min-height: 60px;
+        line-height: 1.5;
+        outline: none;
+      }
+
+      .prompt-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 8px 0;
+        margin-top: 8px;
+        border-top: 1px solid #3f3f46;
+      }
+
+      .prompt-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .control-btn {
+          background-color: #3f3f46;
+          border: 1px solid #52525B;
+          color: #A1A1AA;
+          font-size: 14px;
+          font-weight: 500;
+          padding: 8px 12px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.2s;
+      }
+      .control-btn:hover {
+          background-color: #52525B;
+          color: #f4f4f5;
+      }
+
+      .guidance-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .guidance-container input[type="range"] {
+          width: 140px;
+          -webkit-appearance: none;
+          appearance: none;
+          background: #3f3f46;
+          height: 4px;
+          border-radius: 2px;
+          outline: none;
+          cursor: pointer;
+      }
+      .guidance-container input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 14px;
+          height: 14px;
+          background: #3b82f6;
+          border-radius: 50%;
+          border: 2px solid #f4f4f5;
+      }
+
+      #seed-input {
+        background-color: #27272A;
+        border: 1px solid #52525B;
+        color: #a1a1aa;
+        width: 100px;
+        height: 36px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .btn-regenerate {
+          background-color: #3b82f6;
+          border: none;
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: background-color 0.2s;
+      }
+
+      .btn-regenerate i {
+          transition: transform 0.5s;
+      }
+
+      .btn-regenerate:hover i {
+          transform: rotate(180deg);
+      }
+      .btn-regenerate:hover {
+          background-color: #2563eb;
+      }
+
+
+      /* --- Gallery Tab Content --- */
+      #gallery-tab-content {
+          overflow-y: auto;
+      }
+      #gallery-tab-content .gallery-container {
+         padding: 24px;
+      }
+
+      .gallery-grid {
+        width: 100%;
+      }
+
+
+      /* --- Right Sidebar (History) --- */
+      .right-sidebar {
+        background-color: #27272a;
+        padding: 16px;
+        overflow-y: auto;
+        border-left: 1px solid #3f3f46;
+      }
+
+      .history-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+      }
+      .history-header .icon-btn {
+        background: none;
+        border: none;
+        color: #a1a1aa;
+        cursor: pointer;
+      }
+
+      .history-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .history-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      .history-item img {
+        width: 100%;
+        border-radius: 12px;
+      }
+
+      .history-item span {
+        font-size: 13px;
+        color: #a1a1aa;
+        padding-left: 4px;
+      }
+
+      /* Styles for thumbnail items in sidebars */
+      .thumbnail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding-top: 12px;
+      }
+
+      .thumbnail-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .thumbnail-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .thumbnail-item .image-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+        overflow: hidden;
+        background-color: #3f3f46;
+      }
+
+      .thumbnail-item.selected .image-container {
+        border-color: #60a5fa;
+      }
+
+      .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumbnail-item span {
+        font-size: 12px;
+        color: #a1a1aa;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <!-- Styles Section (Top Level) -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Styles</h3>
+            <i class="fas fa-chevron-right chevron rotated"></i> <!-- Keep rotated if it was by default -->
+          </div>
+          <div class="section-content"> <!-- Styles content visible by default -->
+            <div class="thumbnail-grid">
+              [generateStyleThumbnails]
+            </div>
+          </div>
+        </div>
+
+        <!-- Character (New Parent) -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Character</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <!-- Species -->
+            <div class="control-section">
+              <div class="section-header"><h3>Species</h3><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden"><div class="thumbnail-grid">[generateSpeciesThumbnails]</div></div>
+            </div>
+            <!-- Gender -->
+            <div class="control-section">
+              <div class="section-header"><h3>Gender</h3><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 12px;"><div class="thumbnail-grid" id="gender-thumbnail-grid">[generateGenderThumbnails]</div></div>
+            </div>
+            <!-- Ethnicity -->
+            <div class="control-section">
+              <div class="section-header"><h3>Ethnicity</h3><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="ethnicity-thumbnail-grid">[generateEthnicityThumbnails]</div></div>
+            </div>
+            <!-- Maturity -->
+            <div class="control-section">
+              <div class="section-header"><h3>Maturity</h3><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="maturity-thumbnail-grid">[generateMaturityThumbnails]</div></div>
+            </div>
+            <!-- Persona -->
+            <div class="control-section">
+              <div class="section-header"><h3>Persona</h3><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="persona-thumbnail-grid">[generatePersonaThumbnails]</div></div>
+            </div>
+            <!-- Professions -->
+            <div class="control-section">
+              <div class="section-header"><h3>Professions</h3><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="professions-thumbnail-grid">[generateProfessionsThumbnails]</div></div>
+            </div>
+
+            <!-- Body (New Sub-Parent under Character) -->
+            <div class="control-section">
+              <div class="section-header"><h4>Body</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden">
+                <!-- Body Shapes -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Body Shapes</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="body_shapes-thumbnail-grid">[generateBodyShapesThumbnails]</div></div>
+                </div>
+                <!-- Body Build -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Body Build</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="body_build-thumbnail-grid">[generateBodyBuildThumbnails]</div></div>
+                </div>
+                <!-- Chest Sizes -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Chest Sizes</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="chest_sizes-thumbnail-grid">[generateChestSizesThumbnails]</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hair (New Sub-Parent under Character) -->
+            <div class="control-section">
+              <div class="section-header"><h4>Hair</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden">
+                <!-- Hair Style -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Hair Style</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="hair_style-thumbnail-grid">[generateHairStyleThumbnails]</div></div>
+                </div>
+                <!-- Hair Length -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Hair Length</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 12px;"><div class="thumbnail-grid" id="hair_length-thumbnail-grid">[generateHairLengthThumbnails]</div></div>
+                </div>
+                <!-- Hair Type -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Hair Type</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 12px;"><div class="thumbnail-grid" id="hair_type-thumbnail-grid">[generateHairTypeThumbnails]</div></div>
+                </div>
+                <!-- Hair Colors -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Hair Colors</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="hair_colors-thumbnail-grid">[generateHairColorsThumbnails]</div></div>
+                </div>
+                <!-- Hair Additions -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Hair Additions</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="hair_additions-thumbnail-grid">[generateHairAdditionsThumbnails]</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Face (New Sub-Parent under Character) -->
+            <div class="control-section">
+              <div class="section-header"><h4>Face</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden">
+                <!-- Eye Colors -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Eye Colors</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="eye_colors-thumbnail-grid">[generateEyeColorsThumbnails]</div></div>
+                </div>
+                <!-- Skin Colors -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Skin Colors</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="skin_colors-thumbnail-grid">[generateSkinColorsThumbnails]</div></div>
+                </div>
+                <!-- Facial Decoration -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Facial Decoration</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="facial_decoration-thumbnail-grid">[generateFacialDecorationThumbnails]</div></div>
+                </div>
+                <!-- Expression -->
+                <div class="control-section">
+                  <div class="section-header"><h5>Expression</h5><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="expression-thumbnail-grid">[generateExpressionThumbnails]</div></div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End Character section-content -->
+        </div> <!-- End Character control-section -->
+
+        <!-- Apparel (New Parent) -->
+        <div class="control-section">
+          <div class="section-header"><h3>Apparel</h3><i class="fas fa-chevron-right chevron"></i></div>
+          <div class="section-content hidden">
+            <!-- Headwear -->
+            <div class="control-section">
+              <div class="section-header"><h4>Headwear</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="headwear-thumbnail-grid">[generateHeadwearThumbnails]</div></div>
+            </div>
+            <!-- Topwear -->
+            <div class="control-section">
+              <div class="section-header"><h4>Topwear</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="topwear-thumbnail-grid">[generateTopwearThumbnails]</div></div>
+            </div>
+            <!-- Bottomwear -->
+            <div class="control-section">
+              <div class="section-header"><h4>Bottomwear</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="bottomwear-thumbnail-grid">[generateBottomwearThumbnails]</div></div>
+            </div>
+            <!-- Footwear -->
+            <div class="control-section">
+              <div class="section-header"><h4>Footwear</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="footwear-thumbnail-grid">[generateFootwearThumbnails]</div></div>
+            </div>
+            <!-- Accessories (Hands) -->
+            <div class="control-section">
+              <div class="section-header"><h4>Accessories (Hands)</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="accessories_hands-thumbnail-grid">[generateAccessoriesHandsThumbnails]</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene & Mood (New Parent) -->
+        <div class="control-section">
+          <div class="section-header"><h3>Scene & Mood</h3><i class="fas fa-chevron-right chevron"></i></div>
+          <div class="section-content hidden">
+            <!-- Location -->
+            <div class="control-section">
+              <div class="section-header"><h4>Location</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden"><div class="thumbnail-grid">[generateLocationThumbnails]</div></div>
+            </div>
+            <!-- Mood -->
+            <div class="control-section">
+              <div class="section-header"><h4>Mood</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="mood-thumbnail-grid">[generateMoodThumbnails]</div></div>
+            </div>
+            <!-- Poses -->
+            <div class="control-section">
+              <div class="section-header"><h4>Poses</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="poses-thumbnail-grid">[generatePosesThumbnails]</div></div>
+            </div>
+            <!-- Times -->
+            <div class="control-section">
+              <div class="section-header"><h4>Times</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="times-thumbnail-grid">[generateTimesThumbnails]</div></div>
+            </div>
+            <!-- Weather -->
+            <div class="control-section">
+              <div class="section-header"><h4>Weather</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="weather-thumbnail-grid">[generateWeatherThumbnails]</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artistic & Output (New Parent) -->
+        <div class="control-section">
+          <div class="section-header"><h3>Artistic & Output</h3><i class="fas fa-chevron-right chevron"></i></div>
+          <div class="section-content hidden">
+            <!-- Output Effect -->
+            <div class="control-section">
+              <div class="section-header"><h4>Output Effect</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="output_effect-thumbnail-grid">[generateOutputEffectThumbnails]</div></div>
+            </div>
+            <!-- Lighting -->
+            <div class="control-section">
+              <div class="section-header"><h4>Lighting</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="lighting-thumbnail-grid">[generateLightingThumbnails]</div></div>
+            </div>
+            <!-- Angle -->
+            <div class="control-section">
+              <div class="section-header"><h4>Angle</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="angle-thumbnail-grid">[generateAngleThumbnails]</div></div>
+            </div>
+            <!-- Frame -->
+            <div class="control-section">
+              <div class="section-header"><h4>Frame</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="frame-thumbnail-grid">[generateFrameThumbnails]</div></div>
+            </div>
+            <!-- Shot Types -->
+            <div class="control-section">
+              <div class="section-header"><h4>Shot Types</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="shot_types-thumbnail-grid">[generateShotTypesThumbnails]</div></div>
+            </div>
+            <!-- Techniques -->
+            <div class="control-section">
+              <div class="section-header"><h4>Techniques</h4><i class="fas fa-chevron-right chevron"></i></div>
+              <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="techniques-thumbnail-grid">[generateTechniquesThumbnails]</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extras & NSFW (New Parent) -->
+        <div class="control-section">
+          <div class="section-header"><h3>Extras & NSFW</h3><i class="fas fa-chevron-right chevron"></i></div>
+          <div class="section-content hidden">
+              <!-- Naughty Wear -->
+              <div class="control-section">
+                  <div class="section-header"><h4>Naughty Wear</h4><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="naughty_wear-thumbnail-grid">[generateNaughtyWearThumbnails]</div></div>
+              </div>
+              <!-- Fantasy Wear -->
+              <div class="control-section">
+                  <div class="section-header"><h4>Fantasy Wear</h4><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="fantasy_wear-thumbnail-grid">[generateFantasyWearThumbnails]</div></div>
+              </div>
+              <!-- Traditional Wear -->
+              <div class="control-section">
+                  <div class="section-header"><h4>Traditional Wear</h4><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="traditional_wear-thumbnail-grid">[generateTraditionalWearThumbnails]</div></div>
+              </div>
+              <!-- More Attires -->
+              <div class="control-section">
+                  <div class="section-header"><h4>More Attires</h4><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="more_attires-thumbnail-grid">[generateMoreAttiresThumbnails]</div></div>
+              </div>
+              <!-- NSFW Extras -->
+              <div class="control-section">
+                  <div class="section-header"><h4>NSFW Extras</h4><i class="fas fa-chevron-right chevron"></i></div>
+                  <div class="section-content hidden" style="padding-top: 10px;"><div class="thumbnail-grid" id="nsfw_extras-thumbnail-grid">[generateNsfwExtrasThumbnails]</div></div>
+              </div>
+          </div>
+        </div>
+
+        <!-- URV Themes (Top Level - existing structure, consolidated) -->
+        [something("urvillain-imagine", "https://user.uploads.dev/file/8e34cce3e219d3ea4995977cc097482f.jpg")]
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Themes</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content"> <!-- Themes content visible by default, or make hidden if preferred -->
+            <div class="theme-selector" style="padding-top: 12px;">
+              <span class="theme-label" style="color: #a1a1aa; margin-bottom: 6px; display: block;"><i class="fas fa-palette"></i> URV Themes</span>
+              <select id="selectThemes" class="theme-dropdown" onchange="updateSelectedThemes(this.value)" style="width: 100%; padding: 8px; border-radius: 4px; background-color: #3f3f46; color: #f4f4f5; border: 1px solid #52525b;">
+                [urvThemes]
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Custom Item (Top Level - existing structure) -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Add Custom Item</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div style="padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <input type="text" id="customItemInput" placeholder="Enter item name..." style="background-color: #3f3f46; color: #f4f4f5; border: 1px solid #52525b; padding: 8px; border-radius: 4px;">
+              <button id="addCustomItemBtn" style="background-color: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">Add Item</button>
+            </div>
+            <div id="customItemsContainer" class="thumbnail-grid" style="margin-top: 12px;">
+              <!-- Custom items will be appended here -->
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="top-bar">
+          <div class="logo">ImagineAI</div>
+          <div class="main-tabs">
+            <button class="tab-btn active" data-tab="generate">Generate</button>
+            <button class="tab-btn" data-tab="gallery">Gallery</button>
+            <button class="tab-btn" data-tab="forum">Forum</button> <!-- Added Forum Tab -->
+          </div>
+          <div></div> <!-- Spacer -->
+        </div>
+
+        <div class="tab-content-area">
+          <div id="generate-tab-content" class="tab-pane active">
+            <div class="generation-area" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px;">
+              [dynamic_outputs_list]
+            </div>
+
+            <div class="prompt-area-container">
+                <textarea id="prompt-textarea" placeholder="Describe what you want to create...">A stunning young blonde teenager, emarating an aura of youthful innocence and inexperience. She stands in the vibrant countryside, surrounded by the verdant embrace of lush fields and towering trees, their foliage whispering secrets of the world beyond. Her eves sparkle with the iov of discovery. as she aazes directiv into the camera with a</textarea>
+                <div class="prompt-controls">
+                    <div class="prompt-group">
+                        <button id="aspectRatioBtn" class="control-btn"><i class="far fa-square"></i> 1:1 <i class="fas fa-chevron-down fa-xs"></i></button>
+                        <div class="guidance-container">
+                            <input type="range" id="guidanceScale" min="1" max="15" step="1" value="7" />
+                        </div>
+                        <input type="text" id="seed-input" placeholder="Seed"/>
+                        <!-- New UI Elements Added Here -->
+                        <select id="imageCountSelect" class="control-btn" style="padding: 8px 12px; height: auto; -webkit-appearance: menulist; appearance: menulist;">
+                            <option value="1">1 Image</option>
+                            <option value="2">2 Images</option>
+                            <option value="4" selected>4 Images</option>
+                            <option value="8">8 Images</option>
+                            <option value="16">16 Images</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <input type="number" id="customImageCountInput" min="1" max="32" value="4" style="display: none; width: 70px; margin-left: 10px;" class="control-btn">
+                        <input type="text" id="saveTitleInput" placeholder="Title for gallery..." class="control-btn" style="background-color: #27272A; border: 1px solid #52525B; color: #a1a1aa; width: 120px; height: 36px; text-align: center;">
+                        <button class="control-btn"><i class="fas fa-comment-dots"></i></button>
+                    </div>
+                    <button id="regenerate-btn" class="btn-regenerate"><i class="fas fa-magic"></i> Generate</button>
+                </div>
+            </div>
+          </div>
+
+          <div id="gallery-tab-content" class="tab-pane">
+            <div class="gallery-container">
+              <hr style="border-color: #3f3f46; margin-bottom: 1rem; border-style: solid; border-width: 1px 0 0 0;" />
+              <div style="margin: 0; padding: 0;">
+                <ul style="font-size: 0.8rem; color: #a1a1aa; font-family: inherit; margin: 0; padding-left: 1rem; line-height: 1.5; list-style: none;">
+                  <li style="margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #facc15; margin-right: 8px;"></i>
+                    NSFW images are allowed, but any content involving minors, hate speech, or discrimination will result in an
+                    <strong style="color: #ef4444;">immediate ban</strong>.
+                  </li>
+                  <li style="margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-ban" style="color: #ef4444; margin-right: 8px;"></i>
+                    Spamming the public gallery with <strong style="color: #ffffff;">more than 10 images</strong> of the same theme is prohibited.
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-users" style="color: #3b82f6; margin-right: 8px;"></i>
+                    Respect the public gallery.
+                  </li>
+                </ul>
+              </div>
+              <hr style="border-color: #3f3f46; margin-top: 1rem; margin-bottom: 1rem; border-style: solid; border-width: 1px 0 0 0;" />
+              <div class="gallery-grid">
+                  [fluxSchnell(galleryOptions)]
+              </div>
+            </div>
+          </div>
+
+          <!-- Forum Tab Content -->
+          <div id="forum-tab-content" class="tab-pane">
+            <div class="gallery-container"> <!-- Reusing gallery-container for padding -->
+              [commentsPlugin(commentOptions)]
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Aspect Ratio Cycling ---
+        const aspectRatioBtn = document.getElementById('aspectRatioBtn');
+        const aspectRatios = ["1:1", "2:3", "3:2"]; // Add more as needed
+        const aspectRatioIcons = ["fa-regular fa-square", "fa-solid fa-image-portrait", "fa-solid fa-panorama"]; // Matching Font Awesome icons
+        let currentAspectRatioIndex = 0;
+        let currentResolution = "1024x1024"; // Default, will be updated by updateOrientation
+
+        if (aspectRatioBtn) {
+            // Set initial state by calling updateOrientation
+            updateOrientation(currentAspectRatioIndex); // Initialize button text/data and global var
+
+            aspectRatioBtn.addEventListener('click', () => {
+                currentAspectRatioIndex = (currentAspectRatioIndex + 1) % aspectRatios.length;
+                updateOrientation(currentAspectRatioIndex);
+            });
+        }
+
+        // This function was from index-old.html context, let's define it here or ensure it's available
+        // It seems like the aspect ratio button itself is handling the text, but we need to set `window.resolution`
+        function updateOrientation(value) { // value is the index for aspectRatios array
+            const orientationValueEl = aspectRatioBtn; // The button itself will display the text
+            const resolutions = ["1024x1024", "768x1024", "1024x768"]; // Example resolutions matching 1:1, 2:3, 3:2 for Perchance
+
+            if(orientationValueEl) {
+              orientationValueEl.innerHTML = `<i class="${aspectRatioIcons[value]}"></i> ${aspectRatios[value]} <i class="fas fa-chevron-down fa-xs"></i>`;
+              orientationValueEl.dataset.aspectRatio = aspectRatios[value]; // Keep this for other JS if needed
+            }
+            window.resolution = resolutions[value]; // Set global var for Perchance
+            console.log("Resolution set to:", window.resolution);
+
+            // Also set window.width and window.height
+            if (window.resolution && typeof window.resolution === 'string') {
+                const parts = window.resolution.split('x');
+                if (parts.length === 2) {
+                    window.width = parseInt(parts[0], 10);
+                    window.height = parseInt(parts[1], 10);
+                    console.log(`window.width set to: ${window.width}, window.height set to: ${window.height}`);
+                }
+            }
+        }
+
+
+        function getSelectedAspectRatio() { // This might be redundant if window.resolution is kept up-to-date
+            return aspectRatioBtn ? aspectRatioBtn.dataset.aspectRatio : aspectRatios[0];
+        }
+
+        // --- Main Prompt Assembly and Generation Function ---
+        function generateImages() {
+            let collectedPromptParts = [];
+            let negativePromptParts = []; // For future use if styles have negative parts
+
+            // Get desired image count
+            let count = 1; // Default
+            const imageCountSelectEl = document.getElementById('imageCountSelect');
+            const customImageCountInputEl = document.getElementById('customImageCountInput');
+            if (imageCountSelectEl) {
+                if (imageCountSelectEl.value === 'custom' && customImageCountInputEl) {
+                    count = parseInt(customImageCountInputEl.value, 10) || 1;
+                } else {
+                    count = parseInt(imageCountSelectEl.value, 10) || 1;
+                }
+            }
+            window.desiredImageCount = Math.max(1, Math.min(count, 32)); // Clamp between 1 and 32
+            console.log('window.desiredImageCount set to:', window.desiredImageCount);
+
+            // 1. Get Main Prompt Text
+            const mainPromptText = document.getElementById('prompt-textarea').value.trim();
+            if (mainPromptText) {
+                collectedPromptParts.push(mainPromptText);
+            }
+
+            // 2. Get Selected items from ALL thumbnail grid sections in the sidebar
+            const sidebarControlSections = document.querySelectorAll('.left-sidebar .control-section');
+            sidebarControlSections.forEach(section => {
+                // Check if this section contains a thumbnail grid.
+                // This avoids trying to process sections like "Themes" (dropdown) or "Add Custom Item" here.
+                const thumbnailGrid = section.querySelector('.thumbnail-grid');
+                if (!thumbnailGrid) {
+                    return; // Skip if no thumbnail grid in this section
+                }
+
+                const selectedItem = thumbnailGrid.querySelector('.thumbnail-item.selected');
+                if (selectedItem) {
+                    let mainPromptFromItem = "";
+                    let negativePromptFromItem = "";
+                    const sectionHeader = section.querySelector('h3')?.textContent.trim();
+
+                    if (selectedItem.dataset.prompt) {
+                        const fullPromptData = selectedItem.dataset.prompt;
+                        if (fullPromptData.includes("(negativePrompt:::")) {
+                            const parts = fullPromptData.split("(negativePrompt:::");
+                            mainPromptFromItem = parts[0].trim();
+                            negativePromptFromItem = parts[1].replace(")", "").trim();
+                        } else {
+                            mainPromptFromItem = fullPromptData.trim();
+                        }
+                    } else {
+                        // Fallback to span text if no data-prompt
+                        const itemNameSpan = selectedItem.querySelector('span');
+                        if (itemNameSpan) {
+                            mainPromptFromItem = itemNameSpan.textContent.toLowerCase().trim();
+                        }
+                    }
+
+                    if (mainPromptFromItem) {
+                        // Prepend section header if it's not "Styles" for better context,
+                        // unless the prompt itself is clearly descriptive.
+                        // This is a heuristic and might need refinement.
+                        // For now, let's just add the prompt.
+                        collectedPromptParts.push(mainPromptFromItem);
+                    }
+                    if (negativePromptFromItem) {
+                        negativePromptParts.push(negativePromptFromItem);
+                    }
+                }
+            });
+
+            // 3. Get Custom Added Items (This logic is now effectively block 3, was block 4)
+            const customItems = document.querySelectorAll('#customItemsContainer .thumbnail-item.selected');
+            customItems.forEach(item => {
+                const itemName = item.querySelector('span').textContent;
+                if (itemName) {
+                    collectedPromptParts.push(itemName.toLowerCase());
+                }
+            });
+
+            // 5. Get URV Theme (if selectThemes element exists and has a value)
+            const themeSelect = document.getElementById('selectThemes');
+            if (themeSelect && themeSelect.value) {
+                // Assuming 'theme' object is populated by Perchance for [urvThemes]
+                // and has a structure like: theme = { "themeName1": {prompt: "prompt for theme1"}, ... }
+                // This part is a placeholder as `theme` object is not defined in current scope.
+                // It would typically be populated by the Perchance [urvThemes] plugin.
+                // For now, let's just take the value if it's not empty.
+                if (typeof theme !== 'undefined' && theme[themeSelect.value] && theme[themeSelect.value].prompt) {
+                     collectedPromptParts.push(theme[themeSelect.value].prompt);
+                } else if (themeSelect.value) {
+                    // Fallback if theme object isn't structured as expected, but has a value
+                    // collectedPromptParts.push(themeSelect.value);
+                }
+            }
+
+            // 6. Get Generation Settings
+            const aspectRatio = getSelectedAspectRatio(); // This is "1:1", "2:3", etc.
+            const guidance = document.getElementById('guidanceScale').value;
+            let seed = document.getElementById('seed-input').value.trim();
+            if (seed === '') {
+                seed = Math.floor(Math.random() * 1000000).toString();
+            }
+
+            // --- Assemble Final Prompt ---
+            let finalPrompt = collectedPromptParts.join(", ");
+            let finalNegativePrompt = negativePromptParts.join(", ");
+
+            // --- Setting Global Variables for Perchance ---
+            window.userPrompt = finalPrompt;
+            window.negativePrompt = finalNegativePrompt;
+
+            // window.resolution is already set globally by updateOrientation
+            // and contains strings like "1024x1024"
+
+            // Parse window.resolution to set window.width and window.height
+            if (window.resolution && typeof window.resolution === 'string') {
+                const parts = window.resolution.split('x');
+                if (parts.length === 2) {
+                    window.width = parseInt(parts[0], 10);
+                    window.height = parseInt(parts[1], 10);
+                } else {
+                    console.warn('Resolution string format error. Defaulting width/height.');
+                    window.width = 512;
+                    window.height = 512;
+                }
+            } else {
+                console.warn('window.resolution not set. Defaulting width/height.');
+                window.width = 512;
+                window.height = 512;
+            }
+
+            const guidanceSlider = document.getElementById('guidanceScale');
+            if (guidanceSlider) window.guidanceScale = parseInt(guidanceSlider.value, 10);
+
+            const seedInput = document.getElementById('seed-input');
+            if (seedInput) window.seed = seedInput.value.trim() === '' ? Math.floor(Math.random() * 1000000000).toString() : seedInput.value.trim();
+
+            const saveTitleInput = document.getElementById('saveTitleInput');
+            if (saveTitleInput) window.saveTitle = saveTitleInput.value;
+
+            // Directly update global promptData if it exists
+            if (typeof window.promptData === 'object' && window.promptData !== null) {
+                console.log('Attempting to directly modify global promptData object.');
+                window.promptData.resolution = window.resolution; // Ensure this matches [resolution] placeholder
+                // window.promptData.num_outputs = window.outputCount; // This is now handled by desiredImageCount via Perchance logic
+
+                // Also set width/height on promptData if they are available on window
+                if (window.width && window.height) {
+                    window.promptData.width = window.width;
+                    window.promptData.height = window.height;
+                }
+                console.log('Modified promptData:', JSON.parse(JSON.stringify(window.promptData))); // Log a deep copy
+            } else {
+                console.log('Global promptData object not found or not an object. Relying on Perchance to pick up global window.resolution and window.outputCount for promptData construction.');
+            }
+
+            console.log("--- Global Perchance Variables Set ---");
+            console.log("window.userPrompt:", window.userPrompt);
+            console.log("window.negativePrompt:", window.negativePrompt);
+            console.log("window.resolution:", window.resolution);
+            console.log("window.width:", window.width);
+            console.log("window.height:", window.height);
+            console.log("window.guidanceScale:", window.guidanceScale);
+            console.log("window.seed:", window.seed);
+            console.log("window.outputCount:", window.outputCount);
+            console.log("window.saveTitle:", window.saveTitle);
+            console.log("--- --- ---");
+
+            // Call Perchance's update() function
+            if (typeof update === 'function') {
+                update();
+            } else {
+                console.error("Perchance 'update()' function not found. Generation may not occur automatically via this button. Please ensure Perchance's core 'update' mechanism is available.");
+            }
+
+            console.log("Image display will be handled by Perchance [output] tag.");
+
+            // History saving removed.
+        }
+
+        document.getElementById('regenerate-btn').addEventListener('click', generateImages);
+
+        // --- Collapsible Sections Logic ---
+        const sectionHeaders = document.querySelectorAll(".section-header");
+        sectionHeaders.forEach((header) => {
+          header.addEventListener("click", () => {
+            const content = header.nextElementSibling;
+            const chevron = header.querySelector(".chevron");
+            content.classList.toggle("hidden");
+            chevron.classList.toggle("rotated");
+          });
+        });
+
+        // --- Thumbnail Selection Logic ---
+        const thumbnailItems = document.querySelectorAll(".thumbnail-item");
+        thumbnailItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            const grid = item.closest('.thumbnail-grid');
+            const siblings = grid.querySelectorAll(".thumbnail-item");
+            siblings.forEach((sibling) => sibling.classList.remove("selected"));
+            item.classList.add("selected");
+          });
+        });
+
+        // --- Main Tabs (Generate/Gallery) Logic ---
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const targetTab = button.getAttribute("data-tab");
+                tabButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                tabPanes.forEach(pane => {
+                    pane.classList.toggle("active", pane.id === `${targetTab}-tab-content`);
+                });
+            });
+        });
+
+        // --- Image Count Custom Input Logic ---
+        const imageCountSelectEl = document.getElementById('imageCountSelect');
+        const customImageCountInputEl = document.getElementById('customImageCountInput');
+
+        if (imageCountSelectEl && customImageCountInputEl) {
+            imageCountSelectEl.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customImageCountInputEl.style.display = 'inline-block'; // Or 'block' depending on layout
+                } else {
+                    customImageCountInputEl.style.display = 'none';
+                }
+            });
+        }
+
+        // --- Custom Item Functionality ---
+        const customItemInput = document.getElementById('customItemInput');
+        const addCustomItemBtn = document.getElementById('addCustomItemBtn');
+        const customItemsContainer = document.getElementById('customItemsContainer');
+
+        function addCustomItem() {
+            const itemName = customItemInput.value.trim();
+            if (itemName === '') {
+                alert('Please enter an item name.');
+                return;
+            }
+
+            const newItemDiv = document.createElement('div');
+            newItemDiv.classList.add('thumbnail-item');
+            // newItemDiv.classList.add('custom-item'); // Optional: for specific custom item styling
+
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('image-container');
+            // Placeholder for image - can be a generic icon or text
+            imageContainer.innerHTML = '<i class="fas fa-plus" style="font-size: 24px; color: #52525b; display:flex; justify-content:center; align-items:center; width:100%; height:100%;"></i>';
+
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = itemName;
+
+            newItemDiv.appendChild(imageContainer);
+            newItemDiv.appendChild(nameSpan);
+
+            customItemsContainer.appendChild(newItemDiv);
+
+            // Add selection logic similar to other thumbnail items
+            newItemDiv.addEventListener("click", () => {
+                const grid = newItemDiv.closest('.thumbnail-grid');
+                const siblings = grid.querySelectorAll(".thumbnail-item");
+                siblings.forEach((sibling) => sibling.classList.remove("selected"));
+                newItemDiv.classList.add("selected");
+                // Here you might want to trigger some action with the custom item's name (itemName)
+                console.log("Custom item selected:", itemName);
+            });
+
+            customItemInput.value = ''; // Clear input field
+        }
+
+        if (addCustomItemBtn) {
+            addCustomItemBtn.addEventListener('click', addCustomItem);
+        }
+
+        // Optional: Allow adding by pressing Enter in the input field
+        if (customItemInput) {
+            customItemInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    addCustomItem();
+                }
+            });
+        }
+
+      });
+    </script>
+
+    <!-- Generator Stats from index-old.html -->
+    <stats style="text-align: center; font-size: 0.9em; color: #a1a1aa; padding: 20px;">
+      Thank you to the <strong style="color: #7dd3fc;">[generatorStats(null, "views")] people</strong> who viewed my generator.<br />
+      It was last edited by me <strong style="color: #7dd3fc;">[generatorStats(null, "lastEditTime")]</strong>.
+    </stats>
+  </body>
+</html>
