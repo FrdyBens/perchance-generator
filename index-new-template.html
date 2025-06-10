@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Generator UI</title>
+    <!-- Adding Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+      /* CSS Reset and Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        background-color: #18181b; /* Main dark background */
+        color: #f4f4f5; /* Primary text color (off-white) */
+        height: 100vh;
+        overflow: hidden; /* Prevent body scrolling */
+      }
+
+      /* --- Animations --- */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Main Layout Container */
+      .app-container {
+        display: grid;
+        grid-template-columns: 300px 1fr 260px;
+        height: 100vh;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* --- Left Sidebar --- */
+      .left-sidebar {
+        background-color: #27272a; /* Sidebar background */
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 1px solid #3f3f46;
+      }
+
+      .control-section {
+        margin-bottom: 12px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        cursor: pointer;
+        user-select: none; /* Prevent text selection on click */
+      }
+
+      .section-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .section-header .chevron {
+        color: #a1a1aa;
+        transition: transform 0.3s ease;
+      }
+
+      .section-header .chevron.rotated {
+        transform: rotate(90deg);
+      }
+
+      .section-content {
+        max-height: 1000px; /* Large value for open state */
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+      }
+
+      .section-content.hidden {
+        max-height: 0;
+      }
+
+      /* --- Main Content Area --- */
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        padding: 0 24px;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        flex-shrink: 0; /* Prevent the top bar from shrinking */
+      }
+
+      .top-bar .prompt-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: #a1a1aa;
+      }
+
+      .top-bar .logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+      }
+
+      .top-bar .prompt-input {
+        background: none;
+        border: none;
+        color: #f4f4f5;
+        font-size: 16px;
+        outline: none;
+        width: 400px;
+      }
+
+      .top-bar .actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .top-bar .icon-btn {
+        background: none;
+        border: none;
+        color: #a1a1aa;
+        font-size: 18px;
+        cursor: pointer;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .top-bar .icon-btn:hover {
+        color: #f4f4f5;
+      }
+
+      .generation-area {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 24px 0;
+        gap: 24px;
+        overflow-y: auto; /* Allow scrolling if content overflows */
+      }
+
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+        max-width: 600px; /* Max width for the grid */
+        aspect-ratio: 1 / 1;
+      }
+
+      .image-grid .img-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .image-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+
+      .prompt-container {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .prompt-textarea {
+        width: 100%;
+        min-height: 80px;
+        background-color: #3f3f46;
+        border: 1px solid #52525b;
+        border-radius: 12px;
+        color: #f4f4f5;
+        padding: 12px;
+        resize: vertical;
+        font-size: 14px;
+        line-height: 1.5;
+        outline: none;
+      }
+
+      .prompt-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .action-btn {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #3f3f46;
+        color: #f4f4f5;
+        transition: background-color 0.2s, transform 0.2s;
+      }
+
+      .action-btn:hover {
+        background-color: #52525b;
+        transform: translateY(-1px);
+      }
+
+      .btn-generate {
+        flex-grow: 1; /* Take remaining space */
+        justify-content: center;
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      .btn-generate:hover {
+        background-color: #2563eb;
+      }
+
+      /* --- Right Sidebar (History) --- */
+      .right-sidebar {
+        background-color: #27272a;
+        padding: 16px;
+        overflow-y: auto;
+        border-left: 1px solid #3f3f46;
+      }
+
+      .history-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+      }
+
+      .history-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .history-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .history-item img {
+        width: 100%;
+        border-radius: 12px;
+      }
+
+      .history-item span {
+        font-size: 13px;
+        color: #a1a1aa;
+        padding-left: 4px;
+      }
+
+      /* Styles for thumbnail items in sidebars */
+      .thumbnail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding-top: 12px; /* Add some space from the header */
+      }
+
+      .thumbnail-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .thumbnail-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .thumbnail-item .image-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+        overflow: hidden; /* For images */
+        background-color: #3f3f46;
+      }
+
+      .thumbnail-item.selected .image-container {
+        border-color: #60a5fa; /* Accent blue for selection */
+      }
+
+      .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumbnail-item span {
+        font-size: 12px;
+        color: #a1a1aa; /* Secondary text color */
+      }
+
+      /* Custom styles for settings controls */
+      .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-top: 12px;
+      }
+      .settings-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .settings-item label {
+        font-size: 13px;
+        color: #a1a1aa;
+      }
+      .settings-item input[type="range"] {
+        width: 100%;
+        cursor: pointer;
+      }
+      .settings-item input[type="text"] {
+        background-color: #3f3f46;
+        border: 1px solid #52525b;
+        color: #f4f4f5;
+        padding: 8px;
+        border-radius: 6px;
+        outline: none;
+      }
+      .settings-item select {
+        background-color: #3f3f46;
+        border: 1px solid #52525b;
+        color: #f4f4f5;
+        padding: 8px;
+        border-radius: 6px;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <!-- Styles Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Styles</h3>
+            <i class="fas fa-chevron-right chevron rotated"></i>
+          </div>
+          <div class="section-content">
+            <div class="thumbnail-grid">
+              <div class="thumbnail-item selected">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/92e2d81b729d7fae86ec1a25a368d0f4.jpeg" alt="No Style" /></div>
+                <span>No Style</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/d153de3c105950e5522f2c3954e218d3.jpg" alt="Realistic" /></div>
+                <span>Realistic</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/d8aabfefd44edfb723f618d20f51def9.jpg" alt="Kodak Candid" /></div>
+                <span>Kodak</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/f13829f2c449100c33b82917c394b992.jpg" alt="Cinematic" /></div>
+                <span>Cinematic</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/51c7cd87d5890df3c95a6337026f9a64.jpg" alt="Oil Painting" /></div>
+                <span>Oil Painting</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/794b295ac4ca6880ba87a2452e922646.jpg" alt="Furry" /></div>
+                <span>Furry</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/34d543b3117b98c7889e8d0fcbf6c2dd.jpg" alt="Anime" /></div>
+                <span>Anime</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/769c3b14171b7f0f194b630ad2013b9a.jpg" alt="AuraReal Anime" /></div>
+                <span>AuraReal</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/6e582ada390e5e01dd6122be1bb9b868.jpg" alt="Lofi Art" /></div>
+                <span>Lofi Art</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/171a54dc226e761d849946efa6a717f9.jpg" alt="Pixel Art" /></div>
+                <span>Pixel Art</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/3462abd26ef920a4803311d983da10e0.jpg" alt="Comic Book" /></div>
+                <span>Comic</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user-uploads.perchance.org/file/91084fef10c0855f1c431f6e0d6e47e4.jpg" alt="Disney" /></div>
+                <span>Disney</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/dbe10c8e3d5e08d4553e2a6ef9ee7440.jpg" alt="Cyberpunk" /></div>
+                <span>Cyberpunk</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/ff83888208d03bb7f4ed483efc764283.jpg" alt="Film Noir" /></div>
+                <span>Film Noir</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="https://user.uploads.dev/file/9d057848006e5856dd2f2fa6dfb2b0de.jpg" alt="NSFW Art" /></div>
+                <span>NSFW Art</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generation Settings Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Generation Settings</h3>
+            <i class="fas fa-chevron-right chevron rotated"></i>
+          </div>
+          <div class="section-content">
+            <div class="settings-content">
+              <div class="settings-item">
+                <label for="orientation">Orientation</label>
+                <select id="orientation">
+                  <option value="portrait">Portrait (2:3)</option>
+                  <option value="square" selected>Square (1:1)</option>
+                  <option value="landscape">Landscape (3:2)</option>
+                </select>
+              </div>
+              <div class="settings-item">
+                <label for="guidanceScale">Guidance Scale: 7</label>
+                <input type="range" id="guidanceScale" min="1" max="15" step="1" value="7" />
+              </div>
+              <div class="settings-item">
+                <label for="seed">Seed</label>
+                <input type="text" id="seed" placeholder="Leave blank for random" />
+              </div>
+               <div class="settings-item">
+                <label for="imageCount">Image Count</label>
+                <select id="imageCount">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="4" selected>4</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder Moods Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Moods</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div class="thumbnail-grid">
+              <div class="thumbnail-item"><div class="image-container"><img src="https://picsum.photos/seed/mood1/80" alt="Sweets"></div><span>Sweets</span></div>
+              <div class="thumbnail-item"><div class="image-container"><img src="https://picsum.photos/seed/mood2/80" alt="Classical"></div><span>Classical</span></div>
+              <div class="thumbnail-item"><div class="image-container"><img src="https://picsum.photos/seed/mood3/80" alt="Cyberpunk"></div><span>Cyberpunk</span></div>
+              <div class="thumbnail-item"><div class="image-container"><img src="https://picsum.photos/seed/mood4/80" alt="Dreamy"></div><span>Dreamy</span></div>
+              <div class="thumbnail-item"><div class="image-container"><img src="https://picsum.photos/seed/mood5/80" alt="Glowy"></div><span>Glowy</span></div>
+              <div class="thumbnail-item"><div class="image-container"><img src="https://picsum.photos/seed/mood6/80" alt="Gothic"></div><span>Gothic</span></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="top-bar">
+          <div class="prompt-input-wrapper">
+            <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-upload"></i>
+            <input type="text" class="prompt-input" value="A beautiful portrait of a middle aged woman naked on street" />
+          </div>
+          <!-- <div class="logo"></div> -->
+          <div class="actions">
+            <button class="icon-btn"><i class="fas fa-share-alt"></i> Share</button>
+            <button class="icon-btn"><i class="fas fa-ellipsis-h"></i></button>
+          </div>
+        </div>
+
+        <div class="generation-area">
+          <div class="image-grid"><div style="max-width:800px; margin:0 auto;">[output]</div>
+            <!-- <div class="img-wrapper"><img src="https://picsum.photos/seed/gen1/400" alt="Generated image 1" /></div>
+            <div class="img-wrapper"><img src="https://picsum.photos/seed/gen2/400" alt="Generated image 2" /></div>
+            <div class="img-wrapper"><img src="https://picsum.photos/seed/gen3/400" alt="Generated image 3" /></div>
+            <div class="img-wrapper"><img src="https://picsum.photos/seed/gen4/400" alt="Generated image 4" /></div> -->
+          </div>
+
+          <div class="prompt-container">
+            <!-- <textarea class="prompt-textarea" oninput="userPrompt=this.value" >a female, a teenager, adolescent, young, youthful, innocent, naive, inexperienced, looking at the camera, very happy, joyful facial expression, big smile, sparkling eyes, wearing headphones, sunglasses, in a full length shot, feet to head, in a countryside scenery, fields and trees in background, hair is blonde</textarea> -->
+            <input class="prompt-textarea" placeholder="Type something..." oninput="userPrompt=this.value">
+            <div class="prompt-actions">
+              <button class="action-btn" onclick="update">
+                <i class="fa-solid fa-ruler-combined"></i>
+                1:1
+              </button>
+              <button class="action-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Animate
+              </button>
+              <button class="action-btn btn-generate" onclick="update()">Generate</button>
+              <!-- <button onclick="update()">generate</button> -->
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="right-sidebar">
+        <div class="history-header">
+          <button class="icon-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="history-feed">
+          <div class="history-item">
+            <img src="https://picsum.photos/seed/history1/240" alt="History thumbnail" />
+            <span>Removed a style: 3D</span>
+          </div>
+          <div class="history-item">
+            <img src="https://picsum.photos/seed/history2/240" alt="History thumbnail" />
+            <span>Removed lighting: Neon</span>
+          </div>
+          <div class="history-item">
+            <img src="https://picsum.photos/seed/history3/240" alt="History thumbnail" />
+            <span>Removed a mood: Wasteland</span>
+          </div>
+          <div class="history-item">
+            <img src="https://picsum.photos/seed/history4/240" alt="History thumbnail" />
+            <span>Animated</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Collapsible Sections Logic ---
+        const sectionHeaders = document.querySelectorAll(".section-header");
+
+        sectionHeaders.forEach((header) => {
+          header.addEventListener("click", () => {
+            const content = header.nextElementSibling;
+            const chevron = header.querySelector(".chevron");
+
+            content.classList.toggle("hidden");
+            chevron.classList.toggle("rotated");
+          });
+        });
+
+        // --- Thumbnail Selection Logic ---
+        const thumbnailItems = document.querySelectorAll(".thumbnail-item");
+
+        thumbnailItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            // Find all siblings within the same parent grid
+            const siblings = item.parentElement.querySelectorAll(".thumbnail-item");
+
+            // Deselect all siblings first
+            siblings.forEach((sibling) => {
+              sibling.classList.remove("selected");
+            });
+
+            // Select the clicked item
+            item.classList.add("selected");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
