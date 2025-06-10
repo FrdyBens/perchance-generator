@@ -87,7 +87,7 @@
       /* Main Layout Container */
       .app-container {
         display: grid;
-        grid-template-columns: 320px 1fr; /* Removed third column for right sidebar */
+        grid-template-columns: 320px 1fr 260px;
         height: 100vh;
         animation: fadeIn 0.5s ease-out;
       }
@@ -1589,6 +1589,24 @@
         </div>
       </main>
 
+      <!-- RIGHT SIDEBAR -->
+      <aside class="right-sidebar">
+        <div class="history-header">
+          <button class="icon-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="history-feed">
+          <!-- History items will be dynamically populated by JavaScript -->
+          <!-- Fallback placeholders if JS history is empty: -->
+          <div class="history-item">
+            <img src="https://via.placeholder.com/230x230.png?text=History+1" alt="History thumbnail" />
+            <span>Placeholder prompt 1...</span>
+          </div>
+          <div class="history-item">
+            <img src="https://via.placeholder.com/230x230.png?text=History+2" alt="History thumbnail" />
+            <span>Placeholder prompt 2...</span>
+          </div>
+        </div>
+      </aside>
     </div>
 
     <script>
@@ -1791,21 +1809,6 @@
             const saveTitleInput = document.getElementById('saveTitleInput');
             if (saveTitleInput) window.saveTitle = saveTitleInput.value;
 
-            // Directly update global promptData if it exists
-            if (typeof window.promptData === 'object' && window.promptData !== null) {
-                console.log('Attempting to directly modify global promptData object.');
-                window.promptData.resolution = window.resolution; // Ensure this matches [resolution] placeholder
-                window.promptData.num_outputs = window.outputCount; // Assuming 'num_outputs' is correct
-
-                // Optional: If fluxSchnell prefers width/height explicitly
-                // delete window.promptData.resolution;
-                // window.promptData.width = window.width;
-                // window.promptData.height = window.height;
-                console.log('Modified promptData:', JSON.parse(JSON.stringify(window.promptData))); // Log a deep copy
-            } else {
-                console.log('Global promptData object not found or not an object. Relying on Perchance to pick up global window.resolution and window.outputCount for promptData construction.');
-            }
-
             console.log("--- Global Perchance Variables Set ---");
             console.log("window.userPrompt:", window.userPrompt);
             console.log("window.negativePrompt:", window.negativePrompt);
@@ -1827,7 +1830,12 @@
 
             console.log("Image display will be handled by Perchance [output] tag.");
 
-            // History saving removed.
+            // --- Save to History ---
+            const userFriendlyPromptForHistory = mainPromptText || collectedPromptParts[0] || "Generated Image";
+            const historyPlaceholderUrl = 'https://via.placeholder.com/230x230.png?text=Details+Saved+to+History';
+            if (userFriendlyPromptForHistory) {
+                saveImageToHistory(historyPlaceholderUrl, userFriendlyPromptForHistory);
+            }
         }
 
         document.getElementById('regenerate-btn').addEventListener('click', generateImages);
@@ -1868,6 +1876,98 @@
                 });
             });
         });
+
+        // --- Image History Functionality ---
+        const MAX_HISTORY_ITEMS = 10;
+        const HISTORY_STORAGE_KEY = 'imageHistory';
+
+        function saveImageToHistory(imageUrl, promptText) {
+            let history = loadHistory();
+
+            // Add new item to the beginning
+            history.unshift({ imageUrl, promptText, timestamp: new Date().toISOString() });
+
+            // Limit history size
+            if (history.length > MAX_HISTORY_ITEMS) {
+                history = history.slice(0, MAX_HISTORY_ITEMS);
+            }
+
+            localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+            displayHistory();
+        }
+
+        function loadHistory() {
+            const historyJson = localStorage.getItem(HISTORY_STORAGE_KEY);
+            return historyJson ? JSON.parse(historyJson) : [];
+        }
+
+        function displayHistory() {
+            const historyFeed = document.querySelector('.history-feed');
+            if (!historyFeed) return;
+
+            const history = loadHistory();
+            historyFeed.innerHTML = ''; // Clear current history
+
+            if (history.length === 0) {
+                // Optional: Display a message if history is empty
+                // const emptyMsg = document.createElement('p');
+                // emptyMsg.textContent = 'No history yet.';
+                // emptyMsg.style.color = '#a1a1aa';
+                // historyFeed.appendChild(emptyMsg);
+                // For now, retain existing placeholder if no JS history
+                historyFeed.innerHTML = `
+                  <div class="history-item">
+                    <img src="https://via.placeholder.com/230x230.png?text=History+1" alt="History thumbnail" />
+                    <span>Initial placeholder 1</span>
+                  </div>
+                  <div class="history-item">
+                    <img src="https://via.placeholder.com/230x230.png?text=History+2" alt="History thumbnail" />
+                    <span>Initial placeholder 2</span>
+                  </div>`;
+                return;
+            }
+
+            history.forEach(item => {
+                const historyItemDiv = document.createElement('div');
+                historyItemDiv.classList.add('history-item');
+
+                const img = document.createElement('img');
+                img.src = item.imageUrl;
+                img.alt = 'History thumbnail';
+
+                const span = document.createElement('span');
+                // Display full prompt, or a snippet if too long
+                span.textContent = item.promptText.length > 50 ? item.promptText.substring(0, 47) + '...' : item.promptText;
+
+                historyItemDiv.appendChild(img);
+                historyItemDiv.appendChild(span);
+                historyFeed.appendChild(historyItemDiv);
+            });
+        }
+
+        // Event Listener for saving to history when "Regenerate" is clicked
+        const regenerateBtn = document.getElementById('regenerate-btn');
+        if (regenerateBtn) {
+            regenerateBtn.addEventListener('click', () => {
+                const firstImageInGrid = document.querySelector('.image-grid img');
+                const promptTextarea = document.getElementById('prompt-textarea');
+
+                if (firstImageInGrid && promptTextarea) {
+                    // Use a placeholder image URL for now as the actual generation is simulated
+                    // In a real scenario, this would be the URL of the *newly* generated image
+                    const imageUrl = firstImageInGrid.src; // This will get the current image, not the one about to be generated
+                                                        // For actual implementation, save *after* new image is loaded.
+                                                        // For this task, saving current one is fine.
+                    const prompt = promptTextarea.value;
+                    if (imageUrl && !imageUrl.startsWith('[[') && prompt) { // Avoid saving placeholder links
+                        saveImageToHistory(imageUrl, prompt);
+                    }
+                }
+            });
+        }
+
+        // Initial display of history on page load
+        displayHistory();
 
         // --- Custom Item Functionality ---
         const customItemInput = document.getElementById('customItemInput');
