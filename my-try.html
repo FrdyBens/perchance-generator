@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Generator UI</title>
+    <!-- Adding Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+      /* CSS Reset and Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        background-color: #18181b; /* Main dark background */
+        color: #f4f4f5; /* Primary text color (off-white) */
+        height: 100vh;
+        overflow: hidden; /* Prevent body scrolling */
+      }
+
+      /* --- Animations --- */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* --- Scrollbar --- */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #27272a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #52525b;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #71717a;
+      }
+
+      /* Main Layout Container */
+      .app-container {
+        display: grid;
+        grid-template-columns: 320px 1fr 260px;
+        height: 100vh;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* --- Left Sidebar --- */
+      .left-sidebar {
+        background-color: #27272a; /* Sidebar background */
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 1px solid #3f3f46;
+      }
+
+      .control-section {
+        margin-bottom: 12px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .section-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .section-header .chevron {
+        color: #a1a1aa;
+        transition: transform 0.3s ease;
+      }
+
+      .section-header .chevron.rotated {
+        transform: rotate(90deg);
+      }
+
+      .section-content {
+        max-height: 1000px;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+      }
+
+      .section-content.hidden {
+        max-height: 0;
+      }
+
+      /* --- Main Content Area --- */
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: #1c1c1f;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        flex-shrink: 0;
+        border-bottom: 1px solid #3f3f46;
+        background-color: #18181b;
+      }
+
+      .top-bar .logo {
+        font-size: 20px;
+        font-weight: 700;
+        background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .top-bar .main-tabs {
+        display: flex;
+        gap: 8px;
+        background-color: #27272a;
+        padding: 6px;
+        border-radius: 10px;
+      }
+
+      .top-bar .tab-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: transparent;
+        color: #a1a1aa;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .top-bar .tab-btn.active {
+        background-color: #3f3f46;
+        color: #f4f4f5;
+      }
+
+      /* Tab Content Styling */
+      .tab-content-area {
+        flex-grow: 1;
+        overflow: hidden;
+        position: relative;
+      }
+      .tab-pane {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        overflow: hidden; /* Important for positioning prompt bar */
+      }
+      .tab-pane.active {
+        display: flex;
+      }
+      
+      #generate-tab-content.active {
+          align-items: center;
+          justify-content: center;
+      }
+
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+        max-width: 700px;
+        max-height: 700px;
+        aspect-ratio: 1 / 1;
+      }
+
+      .image-grid .img-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .image-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        background-color: #27272a;
+      }
+      
+      /* New Prompt Container Styling */
+      .prompt-area-container {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 720px;
+        padding: 12px;
+        background-color: rgba(40, 40, 42, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid #3f3f46;
+      }
+
+      .prompt-area-container textarea {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: #f4f4f5;
+        resize: none;
+        font-size: 15px;
+        padding: 8px;
+        min-height: 60px;
+        line-height: 1.5;
+        outline: none;
+      }
+      
+      .prompt-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 8px 0;
+        margin-top: 8px;
+        border-top: 1px solid #3f3f46;
+      }
+
+      .prompt-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .control-btn {
+          background-color: #3f3f46;
+          border: 1px solid #52525B;
+          color: #A1A1AA;
+          font-size: 14px;
+          font-weight: 500;
+          padding: 8px 12px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.2s;
+      }
+      .control-btn:hover {
+          background-color: #52525B;
+          color: #f4f4f5;
+      }
+
+      .guidance-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .guidance-container input[type="range"] {
+          width: 140px;
+          -webkit-appearance: none;
+          appearance: none;
+          background: #3f3f46;
+          height: 4px;
+          border-radius: 2px;
+          outline: none;
+          cursor: pointer;
+      }
+      .guidance-container input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 14px;
+          height: 14px;
+          background: #3b82f6;
+          border-radius: 50%;
+          border: 2px solid #f4f4f5;
+      }
+      
+      #seed-input {
+        background-color: #27272A;
+        border: 1px solid #52525B;
+        color: #a1a1aa;
+        width: 100px;
+        height: 36px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .btn-regenerate {
+          background-color: #3b82f6;
+          border: none;
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
+          padding: 8px 16px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: background-color 0.2s;
+      }
+
+      .btn-regenerate i {
+          transition: transform 0.5s;
+      }
+
+      .btn-regenerate:hover i {
+          transform: rotate(180deg);
+      }
+      .btn-regenerate:hover {
+          background-color: #2563eb;
+      }
+
+
+      /* --- Gallery Tab Content --- */
+      #gallery-tab-content {
+          overflow-y: auto;
+      }
+      #gallery-tab-content .gallery-container {
+         padding: 24px;
+      }
+
+      .gallery-grid {
+        width: 100%;
+      }
+
+
+      /* --- Right Sidebar (History) --- */
+      .right-sidebar {
+        background-color: #27272a;
+        padding: 16px;
+        overflow-y: auto;
+        border-left: 1px solid #3f3f46;
+      }
+
+      .history-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+      }
+      .history-header .icon-btn {
+        background: none;
+        border: none;
+        color: #a1a1aa;
+        cursor: pointer;
+      }
+
+      .history-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .history-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      .history-item img {
+        width: 100%;
+        border-radius: 12px;
+      }
+
+      .history-item span {
+        font-size: 13px;
+        color: #a1a1aa;
+        padding-left: 4px;
+      }
+
+      /* Styles for thumbnail items in sidebars */
+      .thumbnail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        padding-top: 12px;
+      }
+
+      .thumbnail-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .thumbnail-item:hover {
+        transform: translateY(-2px);
+      }
+
+      .thumbnail-item .image-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+        overflow: hidden;
+        background-color: #3f3f46;
+      }
+
+      .thumbnail-item.selected .image-container {
+        border-color: #60a5fa;
+      }
+
+      .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumbnail-item span {
+        font-size: 12px;
+        color: #a1a1aa;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <!-- Styles Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Styles</h3>
+            <i class="fas fa-chevron-right chevron rotated"></i>
+          </div>
+          <div class="section-content">
+            <div class="thumbnail-grid">
+              <div class="thumbnail-item selected">
+                <div class="image-container"><img src="[[links.images.style_none]]" alt="No Style" /></div>
+                <span>No Style</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="[[links.images.style_realistic]]" alt="Realistic" /></div>
+                <span>Realistic</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="[[links.images.style_kodak_candid]]" alt="Kodak Candid" /></div>
+                <span>Kodak</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="[[links.images.style_cinematic]]" alt="Cinematic" /></div>
+                <span>Cinematic</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="[[links.images.style_oil_painting]]" alt="Oil Painting" /></div>
+                <span>Oil Painting</span>
+              </div>
+              <div class="thumbnail-item">
+                <div class="image-container"><img src="[[links.images.style_anime]]" alt="Anime" /></div>
+                <span>Anime</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Species Section -->
+        <div class="control-section">
+          <div class="section-header">
+            <h3>Species</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div class="thumbnail-grid">
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.box_human]]" alt="Human"></div><span>Human</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.box_elf]]" alt="Elf"></div><span>Elf</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.box_dwarf]]" alt="Dwarf"></div><span>Dwarf</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.box_orc]]" alt="Orc"></div><span>Orc</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.box_cyborg]]" alt="Cyborg"></div><span>Cyborg</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.box_angel]]" alt="Angel"></div><span>Angel</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Section -->
+         <div class="control-section">
+          <div class="section-header">
+            <h3>Location</h3>
+            <i class="fas fa-chevron-right chevron"></i>
+          </div>
+          <div class="section-content hidden">
+            <div class="thumbnail-grid">
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.location_forest]]" alt="Forest"></div><span>Forest</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.location_city]]" alt="Cyberpunk City"></div><span>City</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.location_ruins]]" alt="Ruins"></div><span>Ruins</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.location_space]]" alt="Spaceship"></div><span>Spaceship</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.location_beach]]" alt="Beach"></div><span>Beach</span></div>
+                <div class="thumbnail-item"><div class="image-container"><img src="[[links.images.location_tavern]]" alt="Tavern"></div><span>Tavern</span></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="top-bar">
+          <div class="logo">ImagineAI</div>
+          <div class="main-tabs">
+            <button class="tab-btn active" data-tab="generate">Generate</button>
+            <button class="tab-btn" data-tab="gallery">Gallery</button>
+          </div>
+          <div></div> <!-- Spacer -->
+        </div>
+
+        <div class="tab-content-area">
+          <div id="generate-tab-content" class="tab-pane active">
+            <div class="image-grid">
+              <div class="img-wrapper"><img src="[[links.images.gen1]]" alt="Generated image 1" /></div>
+              <div class="img-wrapper"><img src="[[links.images.gen2]]" alt="Generated image 2" /></div>
+              <div class="img-wrapper"><img src="[[links.images.gen3]]" alt="Generated image 3" /></div>
+              <div class="img-wrapper"><img src="[[links.images.gen4]]" alt="Generated image 4" /></div>
+            </div>
+
+            <div class="prompt-area-container">
+                <textarea id="prompt-textarea" placeholder="Describe what you want to create...">A stunning young blonde teenager, emarating an aura of youthful innocence and inexperience. She stands in the vibrant countryside, surrounded by the verdant embrace of lush fields and towering trees, their foliage whispering secrets of the world beyond. Her eves sparkle with the iov of discovery. as she aazes directiv into the camera with a</textarea>
+                <div class="prompt-controls">
+                    <div class="prompt-group">
+                        <button class="control-btn"><i class="far fa-square"></i> 1:1 <i class="fas fa-chevron-down fa-xs"></i></button>
+                        <div class="guidance-container">
+                            <input type="range" id="guidanceScale" min="1" max="15" step="1" value="7" />
+                        </div>
+                        <input type="text" id="seed-input" placeholder="Seed"/>
+                        <button class="control-btn"><i class="fas fa-comment-dots"></i></button>
+                    </div>
+                    <button id="regenerate-btn" class="btn-regenerate"><i class="fas fa-sync-alt"></i> Regenerate</button>
+                </div>
+            </div>
+          </div>
+
+          <div id="gallery-tab-content" class="tab-pane">
+            <div class="gallery-container">
+              <hr style="border-color: #3f3f46; margin-bottom: 1rem; border-style: solid; border-width: 1px 0 0 0;" />
+              <div style="margin: 0; padding: 0;">
+                <ul style="font-size: 0.8rem; color: #a1a1aa; font-family: inherit; margin: 0; padding-left: 1rem; line-height: 1.5; list-style: none;">
+                  <li style="margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #facc15; margin-right: 8px;"></i>
+                    NSFW images are allowed, but any content involving minors, hate speech, or discrimination will result in an
+                    <strong style="color: #ef4444;">immediate ban</strong>.
+                  </li>
+                  <li style="margin-bottom: 0.5rem;">
+                    <i class="fa-solid fa-ban" style="color: #ef4444; margin-right: 8px;"></i>
+                    Spamming the public gallery with <strong style="color: #ffffff;">more than 10 images</strong> of the same theme is prohibited.
+                  </li>
+                  <li>
+                    <i class="fa-solid fa-users" style="color: #3b82f6; margin-right: 8px;"></i>
+                    Respect the public gallery.
+                  </li>
+                </ul>
+              </div>
+              <hr style="border-color: #3f3f46; margin-top: 1rem; margin-bottom: 1rem; border-style: solid; border-width: 1px 0 0 0;" />
+              <div class="gallery-grid">
+                  [fluxSchnell(galleryOptions)]
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="right-sidebar">
+        <div class="history-header">
+          <button class="icon-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="history-feed">
+          <div class="history-item">
+            <img src="[[links.images.history1]]" alt="History thumbnail" />
+            <span>Removed a style: 3D</span>
+          </div>
+          <div class="history-item">
+            <img src="[[links.images.history2]]" alt="History thumbnail" />
+            <span>Removed lighting: Neon</span>
+          </div>
+          <div class="history-item">
+            <img src="[[links.images.history3]]" alt="History thumbnail" />
+            <span>Removed a mood: Wasteland</span>
+          </div>
+          <div class="history-item">
+            <img src="[[links.images.history4]]" alt="History thumbnail" />
+            <span>Animated</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        
+        function generateImages() {
+            // 1. Get all settings from the UI
+            const promptText = document.getElementById('prompt-textarea').value;
+            const guidance = document.getElementById('guidanceScale').value;
+            const seed = document.getElementById('seed-input').value || Math.floor(Math.random() * 100000); // Use random seed if empty
+            
+            // In a real scenario, you'd also get selected styles, boxes, etc.
+            console.log("--- Generation Settings ---");
+            console.log("Prompt:", promptText);
+            console.log("Guidance:", guidance);
+            console.log("Seed:", seed);
+            
+            // 2. Simulate generating new images by updating the grid
+            const imageWrappers = document.querySelectorAll('.image-grid .img-wrapper img');
+            imageWrappers.forEach((img, index) => {
+                // Use a combination of a random number and the index to ensure new images
+                const randomId = Math.floor(Math.random() * 1000);
+                img.src = `https://fastly.picsum.photos/seed/${seed}_${index}_${randomId}/400`;
+            });
+            
+            console.log("Image grid updated for live preview.");
+        }
+
+        document.getElementById('regenerate-btn').addEventListener('click', generateImages);
+
+        // --- Collapsible Sections Logic ---
+        const sectionHeaders = document.querySelectorAll(".section-header");
+        sectionHeaders.forEach((header) => {
+          header.addEventListener("click", () => {
+            const content = header.nextElementSibling;
+            const chevron = header.querySelector(".chevron");
+            content.classList.toggle("hidden");
+            chevron.classList.toggle("rotated");
+          });
+        });
+
+        // --- Thumbnail Selection Logic ---
+        const thumbnailItems = document.querySelectorAll(".thumbnail-item");
+        thumbnailItems.forEach((item) => {
+          item.addEventListener("click", () => {
+            const grid = item.closest('.thumbnail-grid');
+            const siblings = grid.querySelectorAll(".thumbnail-item");
+            siblings.forEach((sibling) => sibling.classList.remove("selected"));
+            item.classList.add("selected");
+          });
+        });
+        
+        // --- Main Tabs (Generate/Gallery) Logic ---
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabPanes = document.querySelectorAll(".tab-pane");
+
+        tabButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const targetTab = button.getAttribute("data-tab");
+                tabButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                tabPanes.forEach(pane => {
+                    pane.classList.toggle("active", pane.id === `${targetTab}-tab-content`);
+                });
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
