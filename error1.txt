@@ -1,0 +1,6 @@
+it not displaying the total amt of images even afetr selecting and actually adding multiple [output] in the html provides more images can you make it dynamic. like [output][output][output][output] will provide 4 images and also inside the number of images add custom where users can select what images they want exactly. also i think you forgot abt all images thumbnails i want all url on the perchance code for easy editing from
+<div class="thumbnail-item" data-prompt="human character, person"><div class="image-container"><img src="https://via.placeholder.com/80x80.png?text=Human" alt="Human"></div><span>Human</span></div>
+
+to
+<div class="thumbnail-item" data-prompt="human character, person"><div class="image-container"><img src="[links.images.species_human" alt="Human"></div><span>Human</span></div>
+but also can you make this dynamic also like it looks for everything under [links.images.here] and creates the entire div

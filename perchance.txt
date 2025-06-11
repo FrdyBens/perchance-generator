@@ -1,0 +1,241 @@
+//
+//                             ,-.
+//        ___,---.__          /'|`\          __,---,___
+//     ,-'    \`    `-.____,-'  |  `-.____,-'    //    `-.
+//   ,'        |           ~'\     /`~           |        `.
+//  /      ___//              `. ,'          ,  , \___      \
+// |    ,-'   `-.__   _         |        ,    __,-'   `-.    |
+// |   /          /\_  `   .    |    ,      _/\          \   |
+// \  |           \ \`-.___ \   |   / ___,-'/ /           |  /
+//  \  \           | `._   `\\  |  //'   _,' |           /  /
+//   `-.\         /'  _ `---'' , . ``---' _  `\         /,-'
+//      ``       /     \    ,='/ \`=.    /     \       ''
+//              |__   /|\_,--.,-.--,--._/|\   __|
+//              /  `./  \\`\ |  |  | /,//' \,'  \
+//             /   /     ||--+--|--+-/-|     \   \
+//            |   |     /'\_\_\ | /_/_/`\     |   |
+//             \   \__, \_     `~'     _/ .__/   /
+//              `-._,-'   `-._______,-'   `-._,-'
+//
+// "Sometimes the wildest imaginations come from the simplest words."
+// 𝗯𝘆 𝘄𝗶𝘁𝗵𝘁𝗵𝗮𝘁𝘄𝗮𝘆
+
+commentsPlugin = {import:comments-plugin}
+fluxSchnell = {import:text-to-image-plugin}
+retain = {import:the-retainer-plugin}
+favicon = {import:favicon-plugin}
+date = {import:date-plugin}
+theme = {import:urv-themes}
+upload = {import:upload-plugin}
+
+// Variable to imported previous generator data
+species = {import:urv-species-v2}
+ethnicity = {import:urv-ethnicity}
+persona = {import:urv-persona}
+professions = {import:urv-professions}
+bodyShape = {import:urv-bodyshape}
+headWear = {import:urv-headwear}
+topWear = {import:urv-topwear}
+bottomWear = {import:urv-bottomwear}
+footWear = {import:urv-footwear}
+hotWear = {import:ur-naughty-wear}
+fantasyWear = {import:urv-fantasywear}
+traditionalWear = {import:urv-traditional-attire}
+moreWear = {import:urv-more-attireplus}
+expression = {import:urv-expression}
+location = {import:urv-location}
+position = {import:urv-position}
+generatorStats = {import:generator-stats-plugin}
+
+$meta
+  title = URVILLAIN Imagine – Advanced AI Art & Image Generator
+  description = Free, Unlimited & No Sign-Up AI Flux Schnell Image Generator: Realistic, Anime, & More.
+  image = https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg
+  header
+    mode = minimal
+    background = #253455
+    
+title
+  URVILLAIN Imagine – Advanced AI Art & Image Generator
+
+
+// this is the new change thisis responcible for the thumbnail/images/icons of the left side please use category_name like style_realistic species_human = url
+// in the html instead of the url that links to the image use [links.images.category_name]
+links
+  images
+    meta_og_image = https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg
+    meta_twitter_image = https://user.uploads.dev/file/a081e6f6a57970899c214fde818b7a4d.jpg
+    favicon_main = https://user.uploads.dev/file/bb9eaa69cf52c1de1ffcb00e91ae8082.png
+    icon_apple_touch = https://user.uploads.dev/file/78681e036e183f78ec57eafa54413905.png
+    icon_180 = https://user.uploads.dev/file/f37a7d70eb6cf3113695dd536f4ac40d.png
+    icon_32 = https://user.uploads.dev/file/affe2a573240f1beb78b45bde5325480.png
+    icon_16 = https://user.uploads.dev/file/cb7d0a2b3b882b66cffcb702502ba624.png
+    header_logo = https://user.uploads.dev/file/70d8482d5c18dd84ab9f544932b98e08.png
+    ui_dropdown_arrow = https://user-uploads.perchance.org/file/cf812b13709b0dc75a2883c5153062eb.png
+    style_none = https://user-uploads.perchance.org/file/92e2d81b729d7fae86ec1a25a368d0f4.jpeg
+    style_realistic = https://user-uploads.perchance.org/file/d153de3c105950e5522f2c3954e218d3.jpg
+    style_kodak_candid = https://user.uploads.dev/file/d8aabfefd44edfb723f618d20f51def9.jpg
+    style_cinematic = https://user.uploads.dev/file/f13829f2c449100c33b82917c394b992.jpg
+    style_oil_painting = https://user-uploads.perchance.org/file/51c7cd87d5890df3c95a6337026f9a64.jpg
+    style_furry = https://user-uploads.perchance.org/file/794b295ac4ca6880ba87a2452e922646.jpg
+    style_anime = https://user-uploads.perchance.org/file/34d543b3117b98c7889e8d0fcbf6c2dd.jpg
+    style_cute_anime = https://user.uploads.dev/file/59e1b201e0b7d832ab79f60c3d20e491.jpg
+    style_aurareal_anime = https://user.uploads.dev/file/769c3b14171b7f0f194b630ad2013b9a.jpg
+    style_colored_manga = https://user.uploads.dev/file/19a342f4a8d3a76b729a17546e3ad4ef.jpg
+    style_lofi_art = https://user.uploads.dev/file/6e582ada390e5e01dd6122be1bb9b868.jpg
+    style_dreamy = https://user.uploads.dev/file/c424f6c51519802c1baa4d73238e2d44.jpg
+    style_pixel_art = https://user-uploads.perchance.org/file/171a54dc226e761d849946efa6a717f9.jpg
+    style_comic_book = https://user-uploads.perchance.org/file/3462abd26ef920a4803311d983da10e0.jpg
+    style_disney = https://user-uploads.perchance.org/file/91084fef10c0855f1c431f6e0d6e47e4.jpg
+    style_painterly_artwork = https://user-uploads.perchance.org/file/9f2cde8f369053ae67ee80d09ac1c637.jpg
+    style_sorolla_painting = https://user-uploads.perchance.org/file/9c389a57d0ec0268d66e2e19c46bf174.jpg
+    style_tavern = https://user.uploads.dev/file/d330d83a7518c7dc51eb5809454a067a.jpg
+    style_cartoon = https://user-uploads.perchance.org/file/87b656a11117bed53dff3eca4f1addf4.jpg
+    style_eastern_painting = https://user.uploads.dev/file/273a772cecc68893429d9bf545954241.jpg
+    style_star_wars = https://user.uploads.dev/file/81b790e1aa7f0cd664a8a1ef21c31931.jpg
+    style_cyberpunk = https://user.uploads.dev/file/dbe10c8e3d5e08d4553e2a6ef9ee7440.jpg
+    style_moba_rts = https://user.uploads.dev/file/280ea7f68aad5818fe5b1ba4e0b4ba8b.jpg
+    style_line_art = https://user.uploads.dev/file/d30538c14c0a0698b9075f5782591cb3.jpg
+    style_film_noir = https://user.uploads.dev/file/ff83888208d03bb7f4ed483efc764283.jpg
+    style_noir_impasto = https://user.uploads.dev/file/8269dda085dcb7485d93fe580d9fa782.jpg
+    style_van_gogh = https://user.uploads.dev/file/3a320a29f5d296f71eb3eb6a0a8f86ff.jpg
+    style_nsfw_art = https://user.uploads.dev/file/9d057848006e5856dd2f2fa6dfb2b0de.jpg
+    misc_obsecuritas_regnum = https://user.uploads.dev/file/8e34cce3e219d3ea4995977cc097482f.jpg
+
+
+    
+// Parameters
+resolution = 512x768
+guidanceScale = 7
+seed = -1
+saveTitle = [""]
+
+promptData
+  prompt = [userPrompt || rDesc]
+  saveTitle = [saveTitle]
+  saveDescription = Upload Date: [date().utc(+7).format("MMMM Do YYYY, h:mm a")]
+  resolution = [resolution]
+  negativePrompt = [negativePrompt],
+  guidanceScale = [guidanceScale]
+  seed = [seed]
+  width = 256px
+  
+output
+  [p=prompt.evaluateItem, ""] [fluxSchnell(promptData)]
+
+// Let's define the array
+urvThemes
+  [theme.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvSpecies
+  [species.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")] 
+urvEthnicity
+  [ethnicity.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvPersona
+  [persona.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvProfessions
+  [professions.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvBodyShape
+  [bodyShape.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvHeadWear
+  [headWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvTopWear
+  [topWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvBottomWear
+  [bottomWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvFootWear
+  [footWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvHotWear
+  [hotWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvFantasyWear
+  [fantasyWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvTraditionalWear
+  [traditionalWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvMoreWear
+  [moreWear.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvExpression
+  [expression.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvLocation
+  [location.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+urvPose
+  [position.selectAll.map(s => `<option value="${s.getName}">${s.getName}</option>`).join("")]
+
+galleryOptions
+  gallery = true
+  sort = recent
+  hideIfScoreIsBelow = none
+  adaptiveHeight = false // <-- expand gallery height so it never has its own scrollbar
+  contentFilter = none  // <-- or 'none' for no default filter
+  style = background:#23232c; border:1px solid #ddd; border-radius:8px; padding:12px; max-width:1024px; margin:20px auto; box-shadow:0 1px 4px rgba(0,0,0,0.04);
+  
+commentOptions
+  width = 100%
+  height = 480px
+  adminPasswordHash = 6c2ec3dbe55afbf726a3a24c26582fe3e749f98c9a3d6b16adaa28e7ba7da2d4
+  adminFlair = 🛡️ WithThatWay
+  deleteButtonIcon = ❌
+  customEmojis
+    @import = {import:huge-emoji-list} // this line includes a huge list of emojis scraped from the internet
+  slashCommands
+    addemoji
+      output = [this.input] {import:emoji}   // when the user types '/addemoji blahblah' it'll output 'blahblah <emoji>'
+  commentPlaceholderText = Type `:` to add emoji.
+  // Styling
+  containerStyle = background:#191a1f; border:1.5px solid #3f4250; box-shadow:0 6px 24px #0008; width:100%; max-width: 1024px; height: 480px; max-height: 1024px; padding:18px; margin:auto;
+  messageBubbleStyle = background:#23232c; color:#f2f2f2; border:1.2px solid #575b6e; border-radius:10px; padding:10px 14px; margin-bottom:9px; font-family:'Poppins', 'Montserrat', sans-serif; font-size:0.8rem; word-break: break-word; overflow-wrap: anywhere;
+  messageFeedStyle = background:#181923; padding:10px; 
+  inputAreaStyle = background:#23232c; border:1.2px solid #575b6e; border-radius:8px; color:#f2f2f2; font-size:15px; padding:8px 12px;
+  submitButtonStyle = background:linear-gradient(90deg,#cf9c45 0%,#e6c27a 100%); color:#181923; border:none; border-radius:2px; font-family:'Futura Condensed', sans-serif; font-weight:600; box-shadow:0 2px 8px #0006; transition:filter .2s; cursor:pointer; padding:8px 20px; margin-top: 0.2rem;
+  
+rDesc    
+  portrait of {a|an} {mystical|futuristic|ancient} {import:animal}-{man|woman}, {starlet|celebrity|priest|model|cleaner|keeper|guardian|wanderer} of {the underworld|the seven worlds|light|darkness|jungle world|cybercrystal|blue fire|electrical storms|the deep heart|the overworld|luxury|dragonkind|forgotten realms|shifting sands|stormy seas}
+  {a|an} {cute|mischievous|majestic|powerful} {import:animal} x {import:animal} hybrid, {pokemon-like creature|legendary beast|fabled guardian}
+  {cyborg|steampunk|magical|bio-enhanced} {mermaid|merman|dolphin|octopus hybrid} exploring {a coral reef|an underwater city|underwater dunes|deep-sea ruins|bioluminescent caverns}
+  {steampunk|futuristic|ancient|cybernetic} explorer with {an airship|a hoverbike|a time-traveling artifact|a magical compass|a self-aware vehicle}
+  {graceful|agile|mysterious|enigmatic} {alien|human|robotic} dancer performing {on stage|in a street|in moonlight|in a zero-gravity chamber|in an enchanted ballroom}
+  {neon|sunset|moonlit|stormy} cityscape during {a rainstorm|a snowfall|a meteor shower|a festival of lights}
+  {magical|enchanted|cursed|forgotten} forest guarded by {giant mushrooms|sentient trees|whimsical spirits|ancient golems|shadow creatures}
+  {lonely|brave|curious|mysterious} lighthouse keeper with {a ghostly|an animal|a supernatural|an enchanted|a mechanical} companion
+  {haunted|abandoned|ancient|mystical} mansion inhabited by {quirky|creepy|kind|playful|mysterious} spirits
+  {futuristic|old-fashioned|magical|surreal} train racing through {a desert|a tundra|a jungle|a floating canyon|a volcanic wasteland}
+  {underwater|sky|space|ethereal} pirate captain with {a submarine|an airship|a spaceship|a magical ship|a bio-organic vessel}
+  {time-traveling|interdimensional|supernatural|cosmic} detective with {a pet dinosaur|a ghostly sidekick|a shape-shifting familiar|a psychic link}
+  {robotic|medieval|fantasy|shadowy} knight jousting on {a mechanical|a fire-breathing|a spectral|an elemental} horse
+  {ethereal|ancient|cosmic|divine} space goddess floating among {stars|nebulae|galaxies|cosmic storms|black holes}
+  {wise|ancient|intelligent|playful|ethereal} {tree|rock|cloud|wind} spirit with {a magical staff|a crystal orb|an enchanted flute|a glowing artifact}
+  {superhero|villain|antihero|renegade} with the ability to control {plants|weather|fire|shadows|time|gravity}
+  {flying|hovering|submersible|time-warping} car chase through {a futuristic|an underwater|a post-apocalyptic|an alien} city
+  {underwater|floating|hidden|crystal} cityscape lit by {bioluminescent plants|ancient crystals|magical torches|alien technology|mystical energy}
+  {mystical|cursed|prehistoric|frozen} cave with {glowing crystal|shimmering ice|luminescent fungus|otherworldly carvings|ancient artifacts}
+  {post-apocalyptic|futuristic|ancient|steampunk} wanderer with {a pet robot|a loyal animal companion|a supernatural guide|a mysterious artifact}
+  {masked|armored|stealthy|shadowy} vigilante perched {on a skyscraper|in a tree|atop a cliff|beside a glowing moon|in a thunderstorm}
+  {sorceress|witch|alchemist|mage} brewing {a potion|a spell|a concoction|a forbidden elixir} in {her hidden lair|a secret cave|an enchanted laboratory|an eerie tower}
+  {steampunk|cyberpunk|fantasy|bio-mechanical} inventor with {a mechanical|a magical|a sentient|a multi-dimensional} companion
+  {cyberpunk|interstellar|paranormal|digital} hacker in {a digital world|a secret network|an alternate reality|a virtual cityscape|a hidden bunker}
+  {enchanted|fairy-tale|secret|ethereal} garden filled with {mythical|unusual|magical|living|singing} creatures
+  {cute|fierce|friendly|playful|intelligent} monster family {going on a picnic|exploring a forest|visiting a village|playing in the clouds|hiding in ruins}
+  {astronaut|alien|time-traveler|dimension-hopper} discovering {an alien oasis|a hidden planet|a realm beyond time|an uncharted galaxy}
+  {old-fashioned|modern|magical|surreal} {ice cream|candy|dessert} parlour with {magical|unusual|dangerous|transformative|healing} flavors
+  {abandoned|haunted|enchanted|dystopian} amusement park {reclaimed by nature|inhabited by spirits|guarded by creatures|lost in time|floating in space}
+  {warrior|sorceress|queen|mage-knight} riding {a mythical|a giant|an elemental|a shadowy|a radiant} beast
+  {vintage|retro|modern|otherworldly|surreal} circus with {supernatural|magical|dangerous|ethereal|living} performers
+  {otherworldly|majestic|mysterious|timeless} library filled with {ancient|enchanted|forbidden|cosmic|whispering} tomes
+  {intrepid|fearless|daring|visionary} explorer navigating {a perilous|a mysterious|an enchanted|a glowing|a hidden} jungle
+  {cozy|remote|enchanted|mystical} cottage in {the mountains|a forest|a magical realm|the clouds|a frozen tundra} with {magical|supernatural|ancient|odd|whimsical} neighbors
+  {street|stage|televised|cosmic} magician performing {a jaw-dropping|a dangerous|an enchanting|a mesmerizing|a reality-bending} illusion
+  {mighty|ancient|winged|cosmic} dragon {slumbering|guarding|hiding|flying over|battling in} {a hoard of treasure|enchanted crystals|cursed artifacts|a celestial battlefield|a ruined castle}
+  {chibi-style|cartoon|realistic|surreal|dreamlike} superheroes {saving the day|battling villains|protecting a city|training together|exploring space}
+  {whimsical|industrial|supernatural|mystical} factory where {dreams|nightmares|wishes|ideas|worlds} are manufactured
+  {space|intergalactic|time-traveling|dimensional} cowboy hunting {intergalactic outlaws|ancient threats|supernatural foes|rogue AIs|ethereal beings}
+  {necromancer|summoner|witch|elementalist} raising {an army of the undead|elemental creatures|magical beings|living shadows|spectral warriors}
+  {brave|cursed|legendary|eternal} warrior with {a haunted|an enchanted|a sentient|a cursed|a glowing} weapon
+  {interdimensional|cosmic|paranormal|otherworldly} {coffee|tea|dessert|alchemy} shop frequented by {odd|magical|alien|timeless|shapeshifting} patrons
+  {enchanted|bewitched|sacred|ancient|hidden} forest populated by {sentient|magical|cursed|playful|mystical} trees
+  {cybernetic|supernatural|mystical|celestial} musician creating {otherworldly|haunting|hypnotic|healing|transcendent} tunes
+  {alien|lost|ancient|futuristic} civilization thriving on {a floating island|a hidden continent|an undiscovered planet|a ring world|a dimensional plane}
+  
+negPr
+  (worst quality, low quality:1.4), by bad-artist-anime, by bad-artist, bad_prompt_version2, EasyNegative, ng_deepnegative_v1_75t, verybadimagenegative_v1.2, ng_deepnegative_v1_75t, (normal quality:2), lowres, ((monochrome)), ((grayscale)), watermark, extra legs, extra hands, wrong anatomy, uncompleted, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, exaggerated proportions, (worst quality, low quality:1.4), by bad-artist-anime, by bad-artist, bad_prompt_version2, EasyNegative, ng_deepnegative_v1_75t, verybadimagenegative_v1.2, ng_deepnegative_v1_75t, (normal quality:2), lowres, ((monochrome)), ((grayscale)), watermark, extra legs, extra hands, wrong anatomy, uncompleted, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, exaggerated proportions
+
+something = {import:yv49wuj5d6}
+
+// =========================== //
